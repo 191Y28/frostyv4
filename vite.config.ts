@@ -15,6 +15,22 @@ function copyAssetsPlugin() {
         fs.cpSync(srcDir, destDir, { recursive: true });
         console.log('[build] Successfully copied assets/ to dist/assets/');
       }
+
+      // Ensure .nojekyll exists in dist/ for GitHub Pages static serving
+      const distDir = path.resolve(rootDir, 'dist');
+      if (fs.existsSync(distDir)) {
+        fs.writeFileSync(path.resolve(distDir, '.nojekyll'), '');
+        console.log('[build] Created .nojekyll in dist/ for GitHub Pages compatibility');
+
+        // Copy root helper cl*.html files and standalone game html files if present
+        const rootFiles = fs.readdirSync(rootDir);
+        for (const file of rootFiles) {
+          if (file.endsWith('.html') && file !== 'index.html') {
+            fs.copyFileSync(path.resolve(rootDir, file), path.resolve(distDir, file));
+            console.log(`[build] Copied game/helper file ${file} to dist/`);
+          }
+        }
+      }
     }
   };
 }

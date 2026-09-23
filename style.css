@@ -508,15 +508,23 @@ html, body {
   color: var(--text-muted);
 }
 
-/* Category Filter Pills */
+/* Curated & Alphabetical Filter Chips */
 .category-filter-pills {
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgba(15, 23, 42, 0.7);
-  padding: 4px;
+  background-color: rgba(15, 23, 42, 0.85);
+  padding: 6px 8px;
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 14px;
+  overflow-x: auto;
+  max-width: 100%;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-filter-pills::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-pill {
@@ -525,23 +533,102 @@ html, body {
   color: #94a3b8;
   font-size: 13px;
   font-weight: 700;
-  padding: 7px 16px;
+  padding: 7px 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.18s ease;
   user-select: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .filter-pill:hover {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 .filter-pill.active {
   background-color: #1e293b;
-  color: var(--primary);
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.pill-icon {
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   INSANE CURATED SECTIONS STYLING
+   ========================================================================== */
+.curated-group {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-bottom: 48px;
+}
+
+.curated-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.curated-group-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.curated-group-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  letter-spacing: 0.04em;
+}
+
+.curated-group-count {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.curated-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+@media (min-width: 1100px) {
+  .curated-games-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1360px) {
+  .curated-games-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .curated-games-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 }
 
 /* ==========================================================================
@@ -905,6 +992,39 @@ html, body {
 
 .game-card:hover .game-name {
   color: var(--primary);
+}
+
+/* Card Badge Pills */
+.card-badge-pill {
+  position: absolute;
+  z-index: 4;
+  top: 10px;
+  left: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.card-badge-hit {
+  background: rgba(234, 179, 8, 0.2);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+}
+
+.card-badge-gem {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.card-badge-flash {
+  background: rgba(249, 115, 22, 0.2);
+  color: #fb923c;
+  border: 1px solid rgba(251, 146, 60, 0.4);
 }
 
 /* ==========================================================================

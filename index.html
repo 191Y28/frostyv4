@@ -139,7 +139,6 @@
       <nav class="frosty-nav">
         <button id="nav-home-btn" class="nav-btn active" onclick="switchFrostySection('home')">Home</button>
         <button id="nav-games-btn" class="nav-btn" onclick="switchFrostySection('games')">Games</button>
-        <button id="nav-copy-btn" class="nav-btn copy-nav-highlight" title="Copy Numbered Game List (Ctrl+Shift+J)" onclick="switchFrostySection('copy')">📋 Copy List</button>
       </nav>
     </header>
 
@@ -151,24 +150,17 @@
 
         <div class="home-btn-wrapper">
           <button id="hero-games-btn" class="games-primary-btn" onclick="switchFrostySection('games')">
-            <span>GAMES</span>
+            <span>EXPLORE 134 GAMES</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-          <button id="hero-copy-btn" class="games-secondary-btn" onclick="switchFrostySection('copy')">
-            <span>COPY LIST</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Section 2: All Games Catalog with Category Filters -->
+    <!-- Section 2: All Games Catalog with Curated & Alphabetical Filters -->
     <section id="section-games" class="frosty-section" style="display:none;">
       <div class="games-bar">
         <div class="games-heading-group">
@@ -177,70 +169,58 @@
             <span id="games-count" class="games-counter">134 games</span>
           </div>
 
-          <!-- Category Filter Pills -->
-          <div class="category-filter-pills">
-            <button id="pill-filter-all" class="filter-pill active" data-filter="all" onclick="filterGamesCategory('all')">All Games (<span id="pill-count-all">134</span>)</button>
-            <button id="pill-filter-main" class="filter-pill" data-filter="main" onclick="filterGamesCategory('main')">Original Games (<span id="pill-count-main">45</span>)</button>
-            <button id="pill-filter-extra" class="filter-pill" data-filter="extra" onclick="filterGamesCategory('extra')">Added Games (<span id="pill-count-extra">89</span>)</button>
+          <!-- Insane Curation & Alphabetical Filter Chips -->
+          <div class="category-filter-pills" id="filters-container">
+            <button class="filter-pill active" data-filter="curated" onclick="setCuratedFilter('curated')">
+              <span class="pill-icon">✨</span> Insane Curation
+            </button>
+            <button class="filter-pill" id="alpha-filter-btn" data-filter="alpha" onclick="setCuratedFilter('alpha')">
+              <span class="pill-icon">🔤</span> Alphabetical (A-Z)
+            </button>
+            <button class="filter-pill" data-filter="popular" onclick="setCuratedFilter('popular')">
+              <span class="pill-icon">👑</span> Popular Hits
+            </button>
+            <button class="filter-pill" data-filter="masterpiece" onclick="setCuratedFilter('masterpiece')">
+              <span class="pill-icon">💎</span> Underrated Gems
+            </button>
+            <button class="filter-pill" data-filter="platformer" onclick="setCuratedFilter('platformer')">
+              <span class="pill-icon">🏃</span> Platformer
+            </button>
+            <button class="filter-pill" data-filter="rpg" onclick="setCuratedFilter('rpg')">
+              <span class="pill-icon">⚔️</span> RPG & Story
+            </button>
+            <button class="filter-pill" data-filter="action" onclick="setCuratedFilter('action')">
+              <span class="pill-icon">🎯</span> Action & Shooters
+            </button>
+            <button class="filter-pill" data-filter="racing" onclick="setCuratedFilter('racing')">
+              <span class="pill-icon">🏎️</span> Racing
+            </button>
+            <button class="filter-pill" data-filter="sports" onclick="setCuratedFilter('sports')">
+              <span class="pill-icon">🥊</span> Sports & Bros
+            </button>
+            <button class="filter-pill" data-filter="horror" onclick="setCuratedFilter('horror')">
+              <span class="pill-icon">👻</span> Horror
+            </button>
+            <button class="filter-pill" data-filter="puzzle" onclick="setCuratedFilter('puzzle')">
+              <span class="pill-icon">🧠</span> Puzzle & Strategy
+            </button>
+            <button class="filter-pill" data-filter="flash" onclick="setCuratedFilter('flash')">
+              <span class="pill-icon">⚡</span> Flash / Ruffle
+            </button>
           </div>
         </div>
 
         <div class="games-actions">
           <div class="search-input-box">
             <span class="search-icon">🔍</span>
-            <input id="search-games" class="search-input" type="text" placeholder="Search games..." />
+            <input id="search-games" class="search-input" type="text" placeholder="Search games by name or genre..." />
           </div>
         </div>
       </div>
 
-      <!-- 4 to 5 Column Responsive Grid -->
+      <!-- Games Grid Container -->
       <div id="games-grid" class="games-grid">
         <!-- Dynamically rendered from script.js -->
-      </div>
-    </section>
-
-    <!-- Section 3: Dedicated Copy List Tab View -->
-    <section id="section-copy" class="frosty-section" style="display:none;">
-      <div class="copy-section-container">
-        <div class="copy-section-header">
-          <div>
-            <h2 class="copy-section-title">📋 Numbered Games List</h2>
-            <p class="copy-section-sub">Select a category below to copy or press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd></p>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px;">
-            <div id="section-copy-badge" class="copy-success-badge" style="display:none;">✓ Copied to Clipboard!</div>
-            <button class="copy-btn-secondary" onclick="switchFrostySection('games')" style="padding:8px 16px; font-size:13px;">← Back to Games</button>
-          </div>
-        </div>
-
-        <div class="copy-filter-tabs">
-          <button id="copy-tab-all" class="copy-tab-btn active" data-copy-type="all" onclick="renderCopySectionList('all')">All Games (<span id="tab-count-all">134</span>)</button>
-          <button id="copy-tab-main" class="copy-tab-btn" data-copy-type="main" onclick="renderCopySectionList('main')">Original Games (<span id="tab-count-main">45</span>)</button>
-          <button id="copy-tab-extra" class="copy-tab-btn" data-copy-type="extra" onclick="renderCopySectionList('extra')">Added Games (<span id="tab-count-extra">89</span>)</button>
-        </div>
-
-        <div class="copy-textarea-wrapper">
-          <textarea id="section-copy-textarea" readonly class="copy-main-textarea" placeholder="Loading games list..."></textarea>
-        </div>
-
-        <div class="copy-actions-bar">
-          <button id="section-open-tab-btn" class="copy-btn-secondary" onclick="openGameListNewTab()" title="Open raw formatted list in a separate browser tab">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <span>Open in New Tab ↗</span>
-          </button>
-          <button id="section-select-all-btn" class="copy-btn-secondary" onclick="selectAllCopyText()">Select All Text</button>
-          <button id="section-copy-action-btn" class="copy-btn-primary" onclick="copySectionAction()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            <span id="section-copy-btn-text">Copy Numbered List</span>
-          </button>
-        </div>
       </div>
     </section>
   </div>
@@ -288,7 +268,7 @@
   </div>
 
   <!-- ======================================================================
-       COPY GAMES MENU MODAL (Triggered by Ctrl+Shift+J or Copy List button)
+       COPY GAMES MENU MODAL (Exclusively Triggered by Ctrl+Shift+J)
        ====================================================================== -->
   <div id="copy-menu-modal" class="modal-overlay" style="display:none;">
     <div class="modal-box">
@@ -296,22 +276,16 @@
         <div class="modal-title-group">
           <div class="modal-icon">📋</div>
           <div>
-            <h2 class="modal-title">Copy All Games</h2>
-            <p class="modal-subtitle">Press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd> anytime to open this menu</p>
+            <h2 class="modal-title">Export Numbered Games Catalog</h2>
+            <p class="modal-subtitle">Direct access unlocked via <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd></p>
           </div>
         </div>
         <button id="modal-close-btn" class="modal-close-btn" title="Close Menu">&times;</button>
       </div>
 
-      <div class="modal-tab-bar">
-        <button id="tab-copy-all" class="modal-tab active" data-type="all">All Games (<span id="count-modal-all">0</span>)</button>
-        <button id="tab-copy-added" class="modal-tab" data-type="extra">Added Games (<span id="count-modal-extra">0</span>)</button>
-        <button id="tab-copy-main" class="modal-tab" data-type="main">Main Catalog (<span id="count-modal-main">0</span>)</button>
-      </div>
-
       <div class="modal-body">
         <div class="textarea-header">
-          <span class="textarea-label">Numbered Game Names List</span>
+          <span class="textarea-label">Numbered Game Catalog (134 Games)</span>
           <span id="copy-status-badge" class="copy-status-badge" style="display:none;">✓ Copied to clipboard!</span>
         </div>
         <textarea id="copy-games-list-text" class="copy-textarea" readonly placeholder="Loading games list..."></textarea>
@@ -323,7 +297,7 @@
             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
-          <span id="copy-btn-text">Copy Numbered List</span>
+          <span id="copy-btn-text">Copy 134 Games</span>
         </button>
         <button id="modal-cancel-btn" class="modal-secondary-btn">Close</button>
       </div>

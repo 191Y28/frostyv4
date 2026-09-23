@@ -19,7 +19,7 @@ const GAMES_REGISTRY = [
   {
     name: '12 Mini Battles',
     cover: 'assets/covers/12minibattles.png',
-    file: 'assets/htmls/cl12minibattles.html'
+    file: '12-mini-battles.html'
   },
   {
     name: '1v1.lol',
@@ -235,12 +235,58 @@ const GAMES_REGISTRY = [
     name: 'Wrassling',
     cover: 'assets/covers/wrassling.jpeg',
     file: 'assets/htmls/clwrassling.html'
+  },
+  {
+    name: 'Bloons TD 2',
+    cover: 'assets/covers/bloonstd2.png',
+    file: 'bloons-TD-2.html'
+  },
+  {
+    name: 'Bloons TD 4',
+    cover: 'assets/covers/bloonstd4.jpg',
+    file: 'bloons-TD-4.html'
+  },
+  {
+    name: 'Duck Life',
+    cover: 'assets/covers/ducklife.png',
+    file: 'duck-life.html'
+  },
+  {
+    name: 'Duck Life 2',
+    cover: 'assets/covers/ducklife2.png',
+    file: 'duck-life-2.html'
+  },
+  {
+    name: 'Duck Life 3',
+    cover: 'assets/covers/ducklife3.png',
+    file: 'duck-life-3.html'
+  },
+  {
+    name: 'Duck Life 4',
+    cover: 'assets/covers/ducklife4.jpg',
+    file: 'duck-life-4.html'
+  },
+  {
+    name: 'Duck Life 5: Treasure Hunt',
+    cover: 'assets/covers/ducklife5.jpg',
+    file: 'duck-life-5.html'
+  },
+  {
+    name: 'Fireboy & Watergirl',
+    cover: 'assets/covers/fireboywatergirl.jpg',
+    file: 'fireboy-and-watergirl.html'
+  },
+  {
+    name: 'Zombie Rush',
+    cover: 'assets/covers/zombierush.jpg',
+    file: 'zombie-rush.html'
   }
 ];
 
 /* ============================================================================
    EXTRA ADDED GAMES REGISTRY (81 Standalone HTML Games - Zero Duplicates)
    ============================================================================ */
+
 const EXTRA_GAMES_REGISTRY = [
   { name: 'Cut the Rope', cover: '', file: 'assets/htmls/clcuttherope.html', tag: 'extra' },
   { name: 'Drift Boss', cover: '', file: 'assets/htmls/cldriftboss.html', tag: 'extra' },
@@ -333,11 +379,267 @@ const EXTRA_GAMES_REGISTRY = [
   { name: 'Ruffle Player', cover: '', file: 'assets/htmls/clruffle.html', tag: 'extra' }
 ];
 
-// Tag original games as 'main'
-const MAIN_GAMES_TAGGED = GAMES_REGISTRY.map(g => ({ ...g, tag: 'main' }));
+/* ============================================================================
+   CURATION & QUALITY METADATA (134 GAMES)
+   Carefully curated metadata for each game checking popularity, gameplay depth,
+   fluidity, and acclaimed quality.
+   ============================================================================ */
+const GAME_CURATION = {
+  // Action & Shooters
+  '1v1.lol': { genre: 'action', isPopular: true, isMasterpiece: false, score: 97 },
+  'Quake III Arena': { genre: 'action', isPopular: true, isMasterpiece: true, score: 97 },
+  'Half-Life': { genre: 'action', isPopular: true, isMasterpiece: true, score: 98 },
+  'Time Shooter 2': { genre: 'action', isPopular: false, isMasterpiece: true, score: 93 },
+  'Time Shooter 3 SWAT': { genre: 'action', isPopular: false, isMasterpiece: true, score: 94 },
+  '2DOOM': { genre: 'action', isPopular: false, isMasterpiece: false, score: 88 },
+  'Bank Robbery 1': { genre: 'action', isPopular: false, isMasterpiece: false, score: 86 },
+  'Bank Robbery 2': { genre: 'action', isPopular: false, isMasterpiece: false, score: 87 },
+  'Funny Shooter 2': { genre: 'action', isPopular: false, isMasterpiece: false, score: 88 },
+  'Funny Battle 2': { genre: 'action', isPopular: false, isMasterpiece: false, score: 85 },
+  'Absolute Madness': { genre: 'action', isPopular: false, isMasterpiece: false, score: 89, isFlash: true },
+  'Zombie Rush': { genre: 'action', isPopular: true, isMasterpiece: false, score: 92 },
+  'Getaway Shootout v2': { genre: 'action', isPopular: false, isMasterpiece: false, score: 88 },
+  'Ragdoll Hit': { genre: 'action', isPopular: false, isMasterpiece: false, score: 89 },
+  'Sword Fight': { genre: 'action', isPopular: false, isMasterpiece: false, score: 84 },
+  '10 Minutes Till Dawn': { genre: 'action', isPopular: false, isMasterpiece: true, score: 91 },
+  'Burrito Bison: Launcha Libre': { genre: 'action', isPopular: true, isMasterpiece: false, score: 91 },
+  'Jetpack Joyride': { genre: 'action', isPopular: true, isMasterpiece: false, score: 93 },
+  'Fruit Ninja': { genre: 'action', isPopular: true, isMasterpiece: false, score: 90 },
+  'Paper.io 2': { genre: 'action', isPopular: true, isMasterpiece: false, score: 96 },
+  'Hole.io': { genre: 'action', isPopular: true, isMasterpiece: false, score: 90 },
+  'Agar.io': { genre: 'action', isPopular: true, isMasterpiece: false, score: 90 },
+  'Snowball.io': { genre: 'action', isPopular: false, isMasterpiece: false, score: 88 },
+  'Build Now': { genre: 'action', isPopular: false, isMasterpiece: false, score: 87 },
+  'Cactus McCoy': { genre: 'action', isPopular: false, isMasterpiece: true, score: 95, isFlash: true },
+  'Cactus McCoy 2': { genre: 'action', isPopular: false, isMasterpiece: true, score: 94, isFlash: true },
 
-// Combined Master Registry (134 Total Games)
-const ALL_GAMES_REGISTRY = [...MAIN_GAMES_TAGGED, ...EXTRA_GAMES_REGISTRY];
+  // Platformer
+  'Super Mario 64': { genre: 'platformer', isPopular: true, isMasterpiece: true, score: 99 },
+  'Pizza Tower': { genre: 'platformer', isPopular: true, isMasterpiece: true, score: 98 },
+  'Run 3': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 96 },
+  'Papa Louie: When Pizzas Attack!': { genre: 'platformer', isPopular: true, isMasterpiece: true, score: 94, isFlash: true },
+  'Papa Louie 2: When Burgers Attack!': { genre: 'platformer', isPopular: true, isMasterpiece: true, score: 93, isFlash: true },
+  'Papa Louie 3: When Sundaes Attack!': { genre: 'platformer', isPopular: true, isMasterpiece: true, score: 92, isFlash: true },
+  'Portal 2D': { genre: 'platformer', isPopular: false, isMasterpiece: true, score: 95 },
+  'Level Devil': { genre: 'platformer', isPopular: false, isMasterpiece: true, score: 93 },
+  'Vex 8': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 93 },
+  'Vex 7': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 92 },
+  'Vex 6': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 91 },
+  'Vex 5': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 90 },
+  'Vex 4': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 89 },
+  'Vex 3': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 88 },
+  'Vex 3 Xmas': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 87 },
+  'Vex X3M': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 90 },
+  'Vex X3M 2': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 91 },
+  'OvO': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 92 },
+  'OvO 2': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 91 },
+  'OvO Dimensions': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 92 },
+  'Geometry Dash Breeze': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 93 },
+  'Hanger 2': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 89, isFlash: true },
+  'Johnny Upgrade': { genre: 'platformer', isPopular: false, isMasterpiece: true, score: 90, isFlash: true },
+  'Tag': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 87 },
+  'Tunnel Rush': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 91 },
+  'Temple Run 2': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 92 },
+  'Subway Surfers': { genre: 'platformer', isPopular: true, isMasterpiece: false, score: 94 },
+  'Fall Guys': { genre: 'platformer', isPopular: false, isMasterpiece: false, score: 89 },
+
+  // RPG & Story
+  'OneShot Legacy': { genre: 'rpg', isPopular: false, isMasterpiece: true, score: 98 },
+  'Planet Life': { genre: 'rpg', isPopular: false, isMasterpiece: true, score: 97 },
+  'BitLife': { genre: 'rpg', isPopular: true, isMasterpiece: false, score: 95 },
+  'Roulette Knight': { genre: 'rpg', isPopular: false, isMasterpiece: true, score: 92 },
+  'Duck Life': { genre: 'rpg', isPopular: true, isMasterpiece: true, score: 95, isFlash: true },
+  'Duck Life 2': { genre: 'rpg', isPopular: true, isMasterpiece: false, score: 93, isFlash: true },
+  'Duck Life 3': { genre: 'rpg', isPopular: true, isMasterpiece: true, score: 95, isFlash: true },
+  'Duck Life 4': { genre: 'rpg', isPopular: true, isMasterpiece: true, score: 98, isFlash: true },
+  'Duck Life 5: Treasure Hunt': { genre: 'rpg', isPopular: true, isMasterpiece: false, score: 94, isFlash: true },
+  'Duck Life Battle': { genre: 'rpg', isPopular: false, isMasterpiece: false, score: 90 },
+  'Duck Life Space': { genre: 'rpg', isPopular: false, isMasterpiece: false, score: 89 },
+  'PvZ 2 Gardendless': { genre: 'rpg', isPopular: false, isMasterpiece: true, score: 93 },
+  'Melon Playground': { genre: 'rpg', isPopular: false, isMasterpiece: false, score: 89 },
+  'Monkey Mart': { genre: 'rpg', isPopular: true, isMasterpiece: false, score: 91 },
+  'Infinite Craft': { genre: 'rpg', isPopular: true, isMasterpiece: false, score: 92 },
+
+  // Sports & Bros
+  'Retro Bowl': { genre: 'sports', isPopular: true, isMasterpiece: true, score: 99 },
+  'Retro Bowl College': { genre: 'sports', isPopular: true, isMasterpiece: true, score: 98 },
+  'Wrestle Bros': { genre: 'sports', isPopular: true, isMasterpiece: false, score: 94 },
+  'Soccer Bros': { genre: 'sports', isPopular: true, isMasterpiece: false, score: 93 },
+  'Football Bros': { genre: 'sports', isPopular: true, isMasterpiece: false, score: 93 },
+  'Karate Bros': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 90 },
+  'Basketball Stars': { genre: 'sports', isPopular: true, isMasterpiece: false, score: 93 },
+  'Basket Random': { genre: 'sports', isPopular: true, isMasterpiece: false, score: 92 },
+  'Boxing Random': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 91 },
+  'Soccer Random': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 90 },
+  'Volley Random': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 90 },
+  'Wrassling': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 88 },
+  'Big Shot Boxing': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 89 },
+  'Boxing Live 2': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 89, isFlash: true },
+  'Football Legends': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 89 },
+  'Idle Football Manager': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 86 },
+  '8 Ball Classic': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 89 },
+  '12 Mini Battles': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 90 },
+  '2-3-4 Player Games': { genre: 'sports', isPopular: false, isMasterpiece: false, score: 90 },
+
+  // Racing
+  'Drive Mad': { genre: 'racing', isPopular: true, isMasterpiece: true, score: 95 },
+  'Moto X3M': { genre: 'racing', isPopular: true, isMasterpiece: false, score: 95 },
+  'Moto X3M Winter': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 93 },
+  'Moto X3M Pool Party': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 92 },
+  'Moto X3M Spooky Land': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 91 },
+  'Moto X3M 2': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 90 },
+  'Moto X3M 3': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 90 },
+  'Drift Boss': { genre: 'racing', isPopular: true, isMasterpiece: false, score: 91 },
+  'Drift Hunters': { genre: 'racing', isPopular: true, isMasterpiece: false, score: 92 },
+  'Madalin Stunt Cars 2': { genre: 'racing', isPopular: true, isMasterpiece: false, score: 93 },
+  'Madalin Stunt Cars Multiplayer': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 91 },
+  'Snow Rider 3D': { genre: 'racing', isPopular: true, isMasterpiece: false, score: 92 },
+  'Summer Rider 3D': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 89 },
+  'Scrap Metal 3': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 88 },
+  'Escape Road 3': { genre: 'racing', isPopular: false, isMasterpiece: false, score: 87 },
+
+  // Horror
+  'Five Nights at Freddy\'s': { genre: 'horror', isPopular: true, isMasterpiece: true, score: 97 },
+  'Five Nights at Freddy\'s 2': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 94 },
+  'Five Nights at Freddy\'s 3': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 92 },
+  'Five Nights at Freddy\'s 4': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 93 },
+  'FNAF 4 Halloween Edition': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 91 },
+  'Freddy Fazbear\'s Pizzeria Simulator': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 93 },
+  'FNAF: Sister Location': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 94 },
+  'FNAF: Ultimate Custom Night': { genre: 'horror', isPopular: true, isMasterpiece: false, score: 95 },
+  'The Man From The Window': { genre: 'horror', isPopular: false, isMasterpiece: true, score: 94 },
+  'Granny': { genre: 'horror', isPopular: true, isMasterpiece: false, score: 92 },
+  'Granny 2': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 90 },
+  'Granny 3': { genre: 'horror', isPopular: false, isMasterpiece: false, score: 89 },
+  'Bad Parenting 1': { genre: 'horror', isPopular: false, isMasterpiece: true, score: 91 },
+  'Baldi\'s Basics Classic Remastered': { genre: 'horror', isPopular: true, isMasterpiece: false, score: 91 },
+
+  // Puzzle & Strategy
+  'Cut the Rope': { genre: 'puzzle', isPopular: true, isMasterpiece: true, score: 95 },
+  'Shift': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 96, isFlash: true },
+  'Shift 2': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 95, isFlash: true },
+  'Achievement Unlocked': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 94, isFlash: true },
+  'Achievement Unlocked 2': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 93, isFlash: true },
+  'Achievement Unlocked 3': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 92, isFlash: true },
+  '2048': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 93 },
+  'Tiny Fishing': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 93 },
+  'Fireboy & Watergirl': { genre: 'puzzle', isPopular: true, isMasterpiece: true, score: 98 },
+  'Fireboy & Watergirl 2': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 92 },
+  'Fireboy & Watergirl 3': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 92 },
+  'Bloons TD 2': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 92, isFlash: true },
+  'Bloons TD 4': { genre: 'puzzle', isPopular: true, isMasterpiece: true, score: 97, isFlash: true },
+  'Bob The Robber': { genre: 'puzzle', isPopular: false, isMasterpiece: true, score: 92, isFlash: true },
+  'Bob The Robber 2': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 91 },
+  'Bob The Robber 5': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 90 },
+  'Angry Birds': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 92 },
+  'Angry Birds 2': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 91 },
+  'Angry Birds Space': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 90, isFlash: true },
+  'Angry Birds Showdown': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 88 },
+  'Bad Piggies': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 92 },
+  'Cookie Clicker': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 91 },
+  'AdVenture Capitalist': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 89 },
+  'Block Blast': { genre: 'puzzle', isPopular: true, isMasterpiece: false, score: 90 },
+  'Blackjack': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 87 },
+  'Papa\'s Taco Mia': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 89 },
+  'Ages of Conflict': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 88 },
+  'Airline Tycoon': { genre: 'puzzle', isPopular: false, isMasterpiece: false, score: 87 },
+
+  // Flash Player Tool
+  'Ruffle Player': { genre: 'flash', isPopular: true, isMasterpiece: true, score: 99, isFlash: true }
+};
+
+// Combined Master Registry with Curation Metadata (134 Total Games)
+const ALL_GAMES_REGISTRY = [...GAMES_REGISTRY, ...EXTRA_GAMES_REGISTRY].map(game => {
+  const meta = GAME_CURATION[game.name] || {
+    genre: 'action',
+    isPopular: false,
+    isMasterpiece: false,
+    score: 85,
+    isFlash: false
+  };
+  return {
+    ...game,
+    genre: meta.genre,
+    isPopular: !!meta.isPopular,
+    isMasterpiece: !!meta.isMasterpiece,
+    score: meta.score || 85,
+    isFlash: !!meta.isFlash
+  };
+});
+
+// Curated Sections for Insane Curation mode
+const CURATED_SECTIONS = [
+  {
+    id: 'legendary',
+    title: '👑 Hall of Fame: Legendary Hits',
+    badge: 'Popular & Top Tier',
+    filter: g => g.isPopular && g.score >= 92,
+    description: 'The most popular, critically acclaimed, viral blockbusters.'
+  },
+  {
+    id: 'masterpieces',
+    title: '💎 Underrated Masterpieces & Hidden Gems',
+    badge: 'Cult Classics',
+    filter: g => g.isMasterpiece,
+    description: 'Indie storytelling, mind-bending puzzles, and cult masterpieces.'
+  },
+  {
+    id: 'platformer',
+    title: '🏃 Platformer & Precision Velocity',
+    badge: 'Jump & Speedrun',
+    filter: g => g.genre === 'platformer',
+    description: 'Parkour, obstacle dodging, and tight momentum physics.'
+  },
+  {
+    id: 'sports',
+    title: '🥊 Competitive Sports & "Bros" Chaos',
+    badge: 'Tournament & Co-op',
+    filter: g => g.genre === 'sports',
+    description: 'From football dynasties to slapstick physics fighting.'
+  },
+  {
+    id: 'racing',
+    title: '🏎️ Speed, Stunts & Drifting',
+    badge: 'High Octane',
+    filter: g => g.genre === 'racing',
+    description: 'Trial stunts, drifting, velocity, and aerial loops.'
+  },
+  {
+    id: 'action',
+    title: '🎯 Tactical Action & Combat Shooters',
+    badge: 'Combat & Reflexes',
+    filter: g => g.genre === 'action',
+    description: 'Guns, slow-mo, reflexes, and adrenaline arena combat.'
+  },
+  {
+    id: 'rpg',
+    title: '⚔️ RPG, Adventure & Quirky Lore',
+    badge: 'Story & Quests',
+    filter: g => g.genre === 'rpg',
+    description: 'Level up, explore bizarre realms, and embark on quests.'
+  },
+  {
+    id: 'horror',
+    title: '👻 Atmospheric & Survival Horror',
+    badge: 'Survival & Dread',
+    filter: g => g.genre === 'horror',
+    description: 'Survive the night, evade monsters, and escape dread.'
+  },
+  {
+    id: 'puzzle',
+    title: '🧠 Logic Puzzles, Physics & Strategy',
+    badge: 'Brain Teasers',
+    filter: g => g.genre === 'puzzle',
+    description: 'Tactile contraptions, arithmetic challenges, and strategy.'
+  },
+  {
+    id: 'flash',
+    title: '⚡ WebAssembly Flash Classics',
+    badge: 'Ruffle Powered',
+    filter: g => g.isFlash || g.genre === 'flash',
+    description: 'The golden age of browser gaming emulated at full 60 FPS.'
+  }
+];
 
 // Secret passcode to permanently unlock Frosty
 const SECRET_PASSCODE = 'NOCHEUFC';
@@ -350,10 +652,10 @@ let activeGameUrl = null;
 let activeGameTitle = '';
 let currentIframeElement = null;
 
-// Filter & Section State
-let currentCategoryFilter = 'all'; // 'all' | 'main' | 'extra'
+// Filter State: 'curated' | 'alpha' | 'popular' | 'masterpiece' | 'platformer' | 'rpg' | 'action' | 'racing' | 'sports' | 'horror' | 'puzzle' | 'flash'
+let currentCuratedFilter = 'curated';
+let alphaSortDirection = 'asc'; // 'asc' | 'desc'
 let currentSearchQuery = '';
-let currentCopyType = 'all'; // 'all' | 'main' | 'extra'
 
 // DOM Elements
 const calculatorView = document.getElementById('calculator-view');
@@ -370,10 +672,10 @@ const sciKeypad = document.getElementById('keypad-scientific');
 
 const sectionHome = document.getElementById('section-home');
 const sectionGames = document.getElementById('section-games');
-const sectionCopy = document.getElementById('section-copy');
 const gamesGrid = document.getElementById('games-grid');
 const searchInput = document.getElementById('search-games');
 const gamesCountEl = document.getElementById('games-count');
+const alphaFilterBtn = document.getElementById('alpha-filter-btn');
 
 // Modal DOM Elements
 const copyModal = document.getElementById('copy-menu-modal');
@@ -381,9 +683,6 @@ const copyTextarea = document.getElementById('copy-games-list-text');
 const copyStatusBadge = document.getElementById('copy-status-badge');
 const copyActionBtn = document.getElementById('copy-all-games-action-btn');
 const copyBtnText = document.getElementById('copy-btn-text');
-const countModalAll = document.getElementById('count-modal-all');
-const countModalExtra = document.getElementById('count-modal-extra');
-const countModalMain = document.getElementById('count-modal-main');
 
 /* ============================================================================
    SINGLETON INTERSECTION OBSERVER
@@ -422,33 +721,30 @@ function checkInitialAccess() {
   const isUnlocked = localStorage.getItem('frosty_unlocked') === 'true';
 
   if (isUnlocked) {
-    // Already unlocked forever: Show Frosty directly
     if (calculatorView) calculatorView.style.display = 'none';
     if (frostyView) frostyView.style.display = 'flex';
     document.title = 'Frosty';
     switchFrostySection('home');
   } else {
-    // First time visitor: Show the cloak calculator
     if (calculatorView) calculatorView.style.display = 'flex';
     if (frostyView) frostyView.style.display = 'none';
     document.title = 'Frosty Calculator';
   }
 
   updateGamesDisplay();
-  renderCopySectionList('all');
 }
 
 function unlockFrostyForever() {
-  // Store permanent unlock in localStorage
   localStorage.setItem('frosty_unlocked', 'true');
 
-  // Flash confirmation
-  calcDisplayEl.style.color = '#38bdf8';
-  calcDisplayEl.textContent = 'UNLOCKED';
+  if (calcDisplayEl) {
+    calcDisplayEl.style.color = '#38bdf8';
+    calcDisplayEl.textContent = 'UNLOCKED';
+  }
 
   setTimeout(() => {
-    calculatorView.style.display = 'none';
-    frostyView.style.display = 'flex';
+    if (calculatorView) calculatorView.style.display = 'none';
+    if (frostyView) frostyView.style.display = 'flex';
     document.title = 'Frosty';
     switchFrostySection('home');
   }, 350);
@@ -458,12 +754,11 @@ function unlockFrostyForever() {
    CALCULATOR ENGINE & SECRET PASSCODE HANDLER
    ============================================================================ */
 function updateCalculatorDisplay() {
-  calcDisplayEl.textContent = calcDisplay || '0';
-  calcHistoryEl.textContent = calcHistory;
+  if (calcDisplayEl) calcDisplayEl.textContent = calcDisplay || '0';
+  if (calcHistoryEl) calcHistoryEl.textContent = calcHistory;
 }
 
 function handleCalculatorInput(val) {
-  // Clear button (Clicked on [CLEAR] button or pressed Escape/Delete)
   if (val === 'CLEAR') {
     calcDisplay = '0';
     calcHistory = '';
@@ -471,149 +766,130 @@ function handleCalculatorInput(val) {
     return;
   }
 
-  // Backspace (Clicked [⌫] or pressed Backspace on keyboard)
   if (val === 'BACK') {
-    if (calcDisplay.length > 1) {
-      calcDisplay = calcDisplay.slice(0, -1);
-    } else {
-      calcDisplay = '0';
-    }
+    calcDisplay = calcDisplay.length > 1 ? calcDisplay.slice(0, -1) : '0';
     updateCalculatorDisplay();
     return;
   }
 
-  // Submit / Equals / Enter
   if (val === '=' || val === 'ENTER') {
     checkSecretOrEvaluate();
     return;
   }
 
-  // If currently displaying '0' and typing a regular character
-  if (calcDisplay === '0' && val !== '.' && !['+', '-', '×', '÷', '%'].includes(val)) {
+  if (val === 'MODE_STANDARD') {
+    calcMode = 'standard';
+    if (alphaKeypad) alphaKeypad.style.display = 'none';
+    if (sciKeypad) sciKeypad.style.display = 'none';
+    return;
+  }
+  if (val === 'MODE_SCIENTIFIC') {
+    calcMode = 'scientific';
+    if (alphaKeypad) alphaKeypad.style.display = 'none';
+    if (sciKeypad) sciKeypad.style.display = 'grid';
+    return;
+  }
+  if (val === 'MODE_ALPHABET') {
+    calcMode = 'alphabet';
+    if (alphaKeypad) alphaKeypad.style.display = 'grid';
+    if (sciKeypad) sciKeypad.style.display = 'none';
+    return;
+  }
+
+  if (calcDisplay === '0' || calcDisplay === 'Error') {
     calcDisplay = val;
   } else {
     calcDisplay += val;
   }
-
-  // Instant unlock if passcode NOCHEUFC is typed
-  if (calcDisplay.trim().toUpperCase().includes(SECRET_PASSCODE)) {
-    unlockFrostyForever();
-    return;
-  }
-
   updateCalculatorDisplay();
 }
 
 function checkSecretOrEvaluate() {
-  const rawInput = calcDisplay.trim().toUpperCase();
+  const sanitized = (calcDisplay || '').toUpperCase().trim();
 
-  // Check if passcode NOCHEUFC is typed anywhere in display
-  if (rawInput.includes(SECRET_PASSCODE)) {
+  if (sanitized === SECRET_PASSCODE) {
     unlockFrostyForever();
     return;
   }
 
-  // Otherwise, evaluate as mathematical expression
   try {
-    let expression = calcDisplay
+    const expr = calcDisplay
       .replace(/×/g, '*')
       .replace(/÷/g, '/')
+      .replace(/−/g, '-')
       .replace(/π/g, 'Math.PI')
-      .replace(/e/g, 'Math.E');
+      .replace(/e/g, 'Math.E')
+      .replace(/sin\(/g, 'Math.sin(')
+      .replace(/cos\(/g, 'Math.cos(')
+      .replace(/tan\(/g, 'Math.tan(')
+      .replace(/sqrt\(/g, 'Math.sqrt(')
+      .replace(/log\(/g, 'Math.log10(')
+      .replace(/ln\(/g, 'Math.log(');
 
-    // Safe mathematical validation
-    if (/^[0-9+\-*/().,%\sMathPIEsincoztanqrlge^]+$/.test(expression)) {
-      expression = expression.replace(/\^/g, '**');
-      const result = Function(`'use strict'; return (${expression})`)();
-      if (result !== undefined && !Number.isNaN(result)) {
-        calcHistory = calcDisplay + ' =';
-        calcDisplay = Number.isInteger(result) ? result.toString() : parseFloat(result.toFixed(8)).toString();
-      } else {
-        calcDisplay = '0';
-      }
-    } else {
-      calcDisplay = '0';
+    if (/[A-Za-z]/.test(expr) && !expr.includes('Math.')) {
+      calcHistory = calcDisplay + ' =';
+      calcDisplay = 'Error';
+      updateCalculatorDisplay();
+      return;
     }
-  } catch (e) {
-    calcDisplay = '0';
-  }
 
-  updateCalculatorDisplay();
-}
-
-function handleScientificFunc(func) {
-  try {
-    const num = parseFloat(calcDisplay) || 0;
-    let res = 0;
-    switch (func) {
-      case 'sin': res = Math.sin(num); break;
-      case 'cos': res = Math.cos(num); break;
-      case 'tan': res = Math.tan(num); break;
-      case 'sqrt': res = Math.sqrt(num); break;
-      case 'sq': res = Math.pow(num, 2); break;
-      case 'log': res = Math.log10(num); break;
-      case 'ln': res = Math.log(num); break;
-      case 'pi': calcDisplay = Math.PI.toString(); updateCalculatorDisplay(); return;
-      case 'e': calcDisplay = Math.E.toString(); updateCalculatorDisplay(); return;
-    }
-    calcHistory = `${func}(${num}) =`;
-    calcDisplay = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(8)).toString();
-  } catch (e) {
-    calcDisplay = '0';
+    const result = Function('"use strict"; return (' + expr + ')')();
+    calcHistory = calcDisplay + ' =';
+    calcDisplay = (result === undefined || isNaN(result)) ? 'Error' : String(result);
+  } catch (err) {
+    calcHistory = calcDisplay + ' =';
+    calcDisplay = 'Error';
   }
   updateCalculatorDisplay();
 }
 
 /* ============================================================================
-   FROSTY NAVIGATION
+   FROSTY HUB VIEW ROUTING
    ============================================================================ */
-function switchFrostySection(section) {
+function switchFrostySection(sectionName) {
   const sHome = document.getElementById('section-home');
   const sGames = document.getElementById('section-games');
-  const sCopy = document.getElementById('section-copy');
-
   const navHomeBtn = document.getElementById('nav-home-btn');
   const navGamesBtn = document.getElementById('nav-games-btn');
-  const navCopyBtn = document.getElementById('nav-copy-btn');
 
-  if (section === 'home') {
-    if (sHome) sHome.style.display = 'block';
+  if (sectionName === 'home') {
+    if (sHome) sHome.style.display = 'flex';
     if (sGames) sGames.style.display = 'none';
-    if (sCopy) sCopy.style.display = 'none';
 
     if (navHomeBtn) navHomeBtn.classList.add('active');
     if (navGamesBtn) navGamesBtn.classList.remove('active');
-    if (navCopyBtn) navCopyBtn.classList.remove('active');
-  } else if (section === 'copy') {
-    if (sHome) sHome.style.display = 'none';
-    if (sGames) sGames.style.display = 'none';
-    if (sCopy) sCopy.style.display = 'block';
-
-    if (navHomeBtn) navHomeBtn.classList.remove('active');
-    if (navGamesBtn) navGamesBtn.classList.remove('active');
-    if (navCopyBtn) navCopyBtn.classList.add('active');
-
-    renderCopySectionList(currentCopyType || 'all');
-  } else {
-    // 'games'
+  } else if (sectionName === 'games') {
     if (sHome) sHome.style.display = 'none';
     if (sGames) sGames.style.display = 'block';
-    if (sCopy) sCopy.style.display = 'none';
 
     if (navHomeBtn) navHomeBtn.classList.remove('active');
     if (navGamesBtn) navGamesBtn.classList.add('active');
-    if (navCopyBtn) navCopyBtn.classList.remove('active');
 
     updateGamesDisplay();
   }
 }
 window.switchFrostySection = switchFrostySection;
 
-function filterGamesCategory(filterType) {
-  currentCategoryFilter = filterType || 'all';
+/* ============================================================================
+   CURATED & ALPHABETICAL FILTER CONTROLLER
+   ============================================================================ */
+function setCuratedFilter(filterKey) {
+  if (filterKey === 'alpha') {
+    if (currentCuratedFilter === 'alpha') {
+      alphaSortDirection = alphaSortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      alphaSortDirection = 'asc';
+    }
+    if (alphaFilterBtn) {
+      const label = alphaSortDirection === 'asc' ? 'A-Z' : 'Z-A';
+      alphaFilterBtn.innerHTML = '<span class="pill-icon">🔤</span> Alphabetical (' + label + ')';
+    }
+  }
+
+  currentCuratedFilter = filterKey;
 
   document.querySelectorAll('.filter-pill').forEach(pill => {
-    if (pill.getAttribute('data-filter') === currentCategoryFilter) {
+    if (pill.getAttribute('data-filter') === filterKey) {
       pill.classList.add('active');
     } else {
       pill.classList.remove('active');
@@ -622,625 +898,412 @@ function filterGamesCategory(filterType) {
 
   updateGamesDisplay();
 }
-window.filterGamesCategory = filterGamesCategory;
+window.setCuratedFilter = setCuratedFilter;
+
+/* ============================================================================
+   GAMES DISPLAY & INSANE CURATED RENDERER
+   ============================================================================ */
+function createGameCardElement(game) {
+  const card = document.createElement('div');
+  card.className = 'game-card';
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-label', 'Play ' + game.name);
+
+  // Badge determination: Popular hit > Underrated gem > Flash classic
+  let badgeHtml = '';
+  if (game.isPopular && game.score >= 92) {
+    badgeHtml = '<span class="card-badge-pill card-badge-hit">👑 Hit</span>';
+  } else if (game.isMasterpiece) {
+    badgeHtml = '<span class="card-badge-pill card-badge-gem">💎 Gem</span>';
+  } else if (game.isFlash || game.genre === 'flash') {
+    badgeHtml = '<span class="card-badge-pill card-badge-flash">⚡ Flash</span>';
+  }
+
+  // Cover Box with Shimmer Skeleton placeholder
+  const coverBox = document.createElement('div');
+  coverBox.className = 'cover-box';
+  coverBox.innerHTML = badgeHtml + '<span class="play-badge">PLAY</span>';
+
+  const img = document.createElement('img');
+  img.className = 'game-cover';
+  img.alt = game.name;
+  img.decoding = 'async';
+
+  if (game.cover) {
+    img.setAttribute('data-src', game.cover);
+    if (imgObserver) {
+      imgObserver.observe(img);
+    } else {
+      img.src = game.cover;
+    }
+  } else {
+    img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><rect width="100%" height="100%" fill="%23111827"/><text x="50%" y="50%" fill="%2394a3b8" font-family="system-ui,sans-serif" font-size="15" font-weight="700" dominant-baseline="middle" text-anchor="middle">' + encodeURIComponent(game.name) + '</text></svg>';
+    img.classList.add('loaded');
+  }
+
+  img.onerror = () => {
+    img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><rect width="100%" height="100%" fill="%231e293b"/><text x="50%" y="50%" fill="%2338bdf8" font-family="system-ui,sans-serif" font-size="14" font-weight="bold" dominant-baseline="middle" text-anchor="middle">' + encodeURIComponent(game.name) + '</text></svg>';
+    img.classList.add('loaded');
+  };
+
+  coverBox.appendChild(img);
+
+  // Meta & Title
+  const metaEl = document.createElement('div');
+  metaEl.className = 'game-meta';
+  const nameEl = document.createElement('div');
+  nameEl.className = 'game-name';
+  nameEl.textContent = game.name;
+  metaEl.appendChild(nameEl);
+
+  card.appendChild(coverBox);
+  card.appendChild(metaEl);
+
+  const launchHandler = (e) => {
+    e.preventDefault();
+    launchGame(game.name, game.file);
+  };
+
+  card.addEventListener('click', launchHandler);
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      launchHandler(e);
+    }
+  });
+
+  return card;
+}
 
 function updateGamesDisplay() {
-  let filtered = ALL_GAMES_REGISTRY;
+  if (!gamesGrid) return;
+  gamesGrid.innerHTML = '';
 
-  if (currentCategoryFilter === 'main') {
-    filtered = filtered.filter(g => g.tag === 'main');
-  } else if (currentCategoryFilter === 'extra') {
-    filtered = filtered.filter(g => g.tag === 'extra');
+  const q = currentSearchQuery.toLowerCase().trim();
+
+  // Mode 1: Insane Curation (Default when no search query is active)
+  if (currentCuratedFilter === 'curated' && !q) {
+    if (gamesCountEl) gamesCountEl.textContent = ALL_GAMES_REGISTRY.length + ' games';
+
+    const fragment = document.createDocumentFragment();
+
+    CURATED_SECTIONS.forEach(section => {
+      const sectionGames = ALL_GAMES_REGISTRY.filter(section.filter);
+      sectionGames.sort((a, b) => b.score - a.score);
+
+      if (sectionGames.length === 0) return;
+
+      const groupEl = document.createElement('div');
+      groupEl.className = 'curated-group';
+
+      const headerEl = document.createElement('div');
+      headerEl.className = 'curated-group-header';
+      headerEl.innerHTML = '<div class="curated-group-title"><span>' + section.title + '</span><span class="curated-group-badge">' + section.badge + '</span></div><span class="curated-group-count">' + sectionGames.length + ' titles</span>';
+
+      const gridEl = document.createElement('div');
+      gridEl.className = 'curated-games-grid';
+
+      sectionGames.forEach(game => {
+        gridEl.appendChild(createGameCardElement(game));
+      });
+
+      groupEl.appendChild(headerEl);
+      groupEl.appendChild(gridEl);
+      fragment.appendChild(groupEl);
+    });
+
+    gamesGrid.appendChild(fragment);
+    return;
   }
 
-  if (currentSearchQuery) {
-    filtered = filtered.filter(g => g.name.toLowerCase().includes(currentSearchQuery));
+  // Mode 2: Filtered or Alphabetical Grid
+  let filtered = [...ALL_GAMES_REGISTRY];
+
+  if (q) {
+    filtered = filtered.filter(g =>
+      g.name.toLowerCase().includes(q) ||
+      g.genre.toLowerCase().includes(q)
+    );
   }
 
-  // Update pill counts
-  const pillAll = document.getElementById('pill-count-all');
-  const pillMain = document.getElementById('pill-count-main');
-  const pillExtra = document.getElementById('pill-count-extra');
-  if (pillAll) pillAll.textContent = ALL_GAMES_REGISTRY.length;
-  if (pillMain) pillMain.textContent = MAIN_GAMES_TAGGED.length;
-  if (pillExtra) pillExtra.textContent = EXTRA_GAMES_REGISTRY.length;
+  if (currentCuratedFilter === 'alpha') {
+    filtered.sort((a, b) => {
+      return alphaSortDirection === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    });
+  } else if (currentCuratedFilter === 'popular') {
+    filtered = filtered.filter(g => g.isPopular);
+    filtered.sort((a, b) => b.score - a.score);
+  } else if (currentCuratedFilter === 'masterpiece') {
+    filtered = filtered.filter(g => g.isMasterpiece);
+    filtered.sort((a, b) => b.score - a.score);
+  } else if (currentCuratedFilter === 'flash') {
+    filtered = filtered.filter(g => g.isFlash || g.genre === 'flash');
+    filtered.sort((a, b) => b.score - a.score);
+  } else if (currentCuratedFilter !== 'curated') {
+    filtered = filtered.filter(g => g.genre === currentCuratedFilter);
+    filtered.sort((a, b) => b.score - a.score);
+  } else {
+    filtered.sort((a, b) => b.score - a.score);
+  }
 
-  renderGamesGrid(filtered, gamesGrid, gamesCountEl);
+  if (gamesCountEl) {
+    gamesCountEl.textContent = filtered.length + ' games';
+  }
+
+  if (filtered.length === 0) {
+    const emptyState = document.createElement('div');
+    emptyState.className = 'empty-state';
+    emptyState.innerHTML = '<div style="font-size: 32px; margin-bottom: 12px;">🔍</div><div style="font-size: 16px; font-weight: 700; color: #fff;">No matching games found</div><div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Try searching with a different term</div>';
+    gamesGrid.appendChild(emptyState);
+    return;
+  }
+
+  const regularGrid = document.createElement('div');
+  regularGrid.className = 'curated-games-grid';
+
+  const fragment = document.createDocumentFragment();
+  filtered.forEach(game => {
+    fragment.appendChild(createGameCardElement(game));
+  });
+
+  regularGrid.appendChild(fragment);
+  gamesGrid.appendChild(regularGrid);
 }
 window.updateGamesDisplay = updateGamesDisplay;
 
 /* ============================================================================
-   COPY GAMES LIST MENU & TAB LOGIC
+   EXPORT NUMBERED GAMES LIST (CTRL + SHIFT + J EXCLUSIVE)
    ============================================================================ */
-function getFormattedGamesList(type) {
-  let list = ALL_GAMES_REGISTRY;
-  if (type === 'main') {
-    list = MAIN_GAMES_TAGGED;
-  } else if (type === 'extra') {
-    list = EXTRA_GAMES_REGISTRY;
-  }
-  return list.map((g, idx) => `${idx + 1}. ${g.name}`).join('\n');
+function getNumberedGamesCatalog() {
+  const sorted = [...ALL_GAMES_REGISTRY].sort((a, b) => a.name.localeCompare(b.name));
+  return sorted.map((g, idx) => (idx + 1) + '. ' + g.name).join('\n');
 }
 
-function renderCopySectionList(type = 'all') {
-  currentCopyType = type;
-
-  const countAllEl = document.getElementById('tab-count-all');
-  const countMainEl = document.getElementById('tab-count-main');
-  const countExtraEl = document.getElementById('tab-count-extra');
-
-  if (countAllEl) countAllEl.textContent = ALL_GAMES_REGISTRY.length;
-  if (countMainEl) countMainEl.textContent = MAIN_GAMES_TAGGED.length;
-  if (countExtraEl) countExtraEl.textContent = EXTRA_GAMES_REGISTRY.length;
-
-  document.querySelectorAll('.copy-tab-btn').forEach(btn => {
-    if (btn.getAttribute('data-copy-type') === type) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-
-  const sectionTextarea = document.getElementById('section-copy-textarea');
-  if (sectionTextarea) {
-    sectionTextarea.value = getFormattedGamesList(type);
-  }
-
+function openCopyGamesModal() {
   if (copyTextarea) {
-    copyTextarea.value = getFormattedGamesList(type);
+    copyTextarea.value = getNumberedGamesCatalog();
   }
-}
-window.renderCopySectionList = renderCopySectionList;
-
-function selectAllCopyText() {
-  const sectionTextarea = document.getElementById('section-copy-textarea');
-  if (sectionTextarea) {
-    sectionTextarea.focus();
-    sectionTextarea.select();
-    sectionTextarea.setSelectionRange(0, 999999);
+  if (copyStatusBadge) {
+    copyStatusBadge.style.display = 'none';
   }
-}
-window.selectAllCopyText = selectAllCopyText;
-
-function copySectionAction() {
-  const sectionTextarea = document.getElementById('section-copy-textarea');
-  const sectionCopyBadge = document.getElementById('section-copy-badge');
-  const sectionCopyBtnText = document.getElementById('section-copy-btn-text');
-  copyTextFromElement(sectionTextarea, sectionCopyBadge, sectionCopyBtnText);
-}
-window.copySectionAction = copySectionAction;
-
-function openGameListNewTab(type = currentCopyType || 'all') {
-  const text = getFormattedGamesList(type);
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  window.open(url, '_blank');
-}
-window.openGameListNewTab = openGameListNewTab;
-
-function openCopyGamesMenuModal(tabType = 'all') {
-  if (countModalAll) countModalAll.textContent = ALL_GAMES_REGISTRY.length;
-  if (countModalExtra) countModalExtra.textContent = EXTRA_GAMES_REGISTRY.length;
-  if (countModalMain) countModalMain.textContent = MAIN_GAMES_TAGGED.length;
-
-  document.querySelectorAll('.modal-tab').forEach(tab => {
-    if (tab.dataset.type === tabType) {
-      tab.classList.add('active');
-    } else {
-      tab.classList.remove('active');
-    }
-  });
-
-  if (copyTextarea) {
-    copyTextarea.value = getFormattedGamesList(tabType);
+  if (copyBtnText) {
+    copyBtnText.textContent = 'Copy ' + ALL_GAMES_REGISTRY.length + ' Games';
   }
-
-  if (copyStatusBadge) copyStatusBadge.style.display = 'none';
-  if (copyBtnText) copyBtnText.textContent = 'Copy Numbered List';
-
   if (copyModal) {
     copyModal.style.display = 'flex';
   }
 }
 
-function closeCopyGamesMenuModal() {
+function closeCopyGamesModal() {
   if (copyModal) {
     copyModal.style.display = 'none';
   }
 }
 
-function copyTextFromElement(textareaEl, badgeEl, btnTextEl) {
-  if (!textareaEl) return;
-  const textToCopy = textareaEl.value;
-  if (!textToCopy) return;
-
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      showCopyFeedback(badgeEl, btnTextEl);
-    }).catch(() => {
-      fallbackCopyText(textareaEl, badgeEl, btnTextEl);
-    });
+function toggleCopyGamesModal() {
+  if (!copyModal) return;
+  if (copyModal.style.display === 'flex') {
+    closeCopyGamesModal();
   } else {
-    fallbackCopyText(textareaEl, badgeEl, btnTextEl);
+    openCopyGamesModal();
   }
-}
-window.copyTextFromElement = copyTextFromElement;
-
-function fallbackCopyText(textareaEl, badgeEl, btnTextEl) {
-  try {
-    textareaEl.focus();
-    textareaEl.select();
-    textareaEl.setSelectionRange(0, 999999);
-    document.execCommand('copy');
-    showCopyFeedback(badgeEl, btnTextEl);
-  } catch (e) {
-    alert('List selected. Press Ctrl+C or Cmd+C to copy!');
-  }
-}
-
-function showCopyFeedback(badgeEl, btnTextEl) {
-  if (badgeEl) badgeEl.style.display = 'inline-block';
-  if (btnTextEl) btnTextEl.textContent = '✓ Copied!';
-
-  setTimeout(() => {
-    if (badgeEl) badgeEl.style.display = 'none';
-    if (btnTextEl) btnTextEl.textContent = 'Copy Numbered List';
-  }, 2500);
 }
 
 /* ============================================================================
-   DYNAMIC GAME COVER ART GENERATOR
-   Generates vibrant HSL gradient cover art with gamepad icons & clean title text
-   for any game missing a static cover image or failing to load over network.
+   GAME PLAYER CONTROLLER & FULLSCREEN ENGINE
    ============================================================================ */
-const svgCoverCache = new Map();
-function generateGameCoverSVG(title) {
-  const safeTitle = (title || 'Game').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  if (svgCoverCache.has(safeTitle)) {
-    return svgCoverCache.get(safeTitle);
-  }
-
-  let hash = 0;
-  for (let i = 0; i < safeTitle.length; i++) {
-    hash = safeTitle.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const h1 = Math.abs(hash) % 360;
-  const h2 = (h1 + 45) % 360;
-  const fontSize = safeTitle.length > 25 ? 12 : safeTitle.length > 18 ? 14 : 16;
-
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
-    <defs>
-      <linearGradient id="g_${Math.abs(hash)}" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="hsl(${h1}, 70%, 20%)" />
-        <stop offset="100%" stop-color="hsl(${h2}, 80%, 10%)" />
-      </linearGradient>
-    </defs>
-    <rect width="300" height="300" rx="12" fill="url(#g_${Math.abs(hash)})" />
-    <circle cx="150" cy="115" r="42" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.35)" stroke-width="2" />
-    <path d="M132 115 h36 M150 97 v36 M166 122 a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7 M134 122 a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" stroke="%2338bdf8" stroke-width="3" stroke-linecap="round" fill="none" />
-    <text x="150" y="200" text-anchor="middle" fill="%23ffffff" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="${fontSize}">${safeTitle}</text>
-    <rect x="80" y="222" width="140" height="24" rx="12" fill="rgba(56, 189, 248, 0.15)" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1" />
-    <text x="150" y="238" text-anchor="middle" fill="%2338bdf8" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="10" letter-spacing="1">UNBLOCKED</text>
-  </svg>`;
-
-  const result = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
-  svgCoverCache.set(safeTitle, result);
-  return result;
-}
-window.generateGameCoverSVG = generateGameCoverSVG;
-
-/* ============================================================================
-   GAMES GRID RENDERING WITH DOCUMENT FRAGMENT & EVENT DELEGATION
-   ============================================================================ */
-const PLACEHOLDER_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23111827'/%3E%3C/svg%3E";
-
-function renderGamesGrid(games, targetGrid = gamesGrid, counterEl = gamesCountEl) {
-  if (!targetGrid) return;
-  targetGrid.innerHTML = '';
-
-  if (!games || games.length === 0) {
-    targetGrid.innerHTML = `
-      <div class="empty-games-box">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5">
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-        </svg>
-        <p class="empty-games-title">No games found</p>
-        <p class="empty-games-sub">Try adjusting your search filter.</p>
-      </div>
-    `;
-    if (counterEl) counterEl.textContent = '0 games';
-    return;
-  }
-
-  if (counterEl) {
-    counterEl.textContent = `${games.length} game${games.length === 1 ? '' : 's'}`;
-  }
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = 0; i < games.length; i++) {
-    const game = games[i];
-    const card = document.createElement('div');
-    card.className = 'game-card';
-    card.setAttribute('data-name', game.name);
-    card.setAttribute('data-file', game.file);
-    card.setAttribute('id', `game-card-${i}`);
-
-    const generatedCover = generateGameCoverSVG(game.name);
-    const hasCustomCover = game.cover && game.cover.trim() !== '';
-    const initialSrc = hasCustomCover ? PLACEHOLDER_SVG : generatedCover;
-    const coverSrc = hasCustomCover ? game.cover : generatedCover;
-    const safeTitleEscaped = game.name.replace(/"/g, '&quot;');
-
-    card.innerHTML = `
-      <div class="cover-box">
-        <img 
-          class="game-cover ${hasCustomCover ? 'lazy-img' : 'loaded'}" 
-          data-src="${coverSrc}" 
-          src="${initialSrc}" 
-          alt="${safeTitleEscaped}" 
-          loading="lazy" 
-          decoding="async"
-        />
-        <div class="play-badge">PLAY</div>
-      </div>
-      <div class="game-meta">
-        <div class="game-name" title="${safeTitleEscaped}">${game.name}</div>
-      </div>
-    `;
-
-    fragment.appendChild(card);
-
-    const img = card.querySelector('.game-cover');
-    if (img) {
-      img.onerror = function() {
-        this.onerror = null;
-        if (window.generateGameCoverSVG) {
-          this.src = window.generateGameCoverSVG(game.name);
-        }
-        this.classList.add('loaded');
-      };
-
-      if (hasCustomCover && imgObserver) {
-        imgObserver.observe(img);
-      } else {
-        img.src = coverSrc;
-        img.classList.add('loaded');
-      }
-    }
-  }
-
-  targetGrid.appendChild(fragment);
-}
-
-/* ============================================================================
-   ZERO-LEAK EMBEDDED GAME PLAYER LIFECYCLE
-   Destroys and recreates iframe DOM element on demand to force the browser
-   garbage collector to immediately reclaim 100% of WebGL, WASM, and Audio RAM!
-   ============================================================================ */
-function destroyCurrentIframe() {
-  if (currentIframeElement) {
-    currentIframeElement.onload = null;
-    currentIframeElement.onerror = null;
-    try {
-      if (currentIframeElement.contentWindow) {
-        currentIframeElement.contentWindow.location.replace('about:blank');
-      }
-    } catch (e) {}
-    currentIframeElement.src = 'about:blank';
-    if (currentIframeElement.parentNode) {
-      currentIframeElement.parentNode.removeChild(currentIframeElement);
-    }
-    currentIframeElement = null;
-  }
-}
-
 function launchGame(title, fileUrl) {
   let normalizedUrl = fileUrl || '';
   if (normalizedUrl && !normalizedUrl.startsWith('http') && !normalizedUrl.startsWith('/') && !normalizedUrl.startsWith('assets/')) {
     normalizedUrl = 'assets/htmls/' + normalizedUrl;
   }
+
   activeGameUrl = normalizedUrl;
-  activeGameTitle = title;
-  if (playerTitle) playerTitle.textContent = title;
+  activeGameTitle = title || 'Game';
+
+  if (playerTitle) playerTitle.textContent = activeGameTitle;
   if (frameLoader) frameLoader.style.display = 'flex';
-  if (gamePlayerView) gamePlayerView.style.display = 'flex';
 
-  // Native fullscreen attempt if supported
-  try {
-    if (gamePlayerView && gamePlayerView.requestFullscreen) {
-      gamePlayerView.requestFullscreen().catch(() => {});
-    } else if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    }
-  } catch (err) {}
+  if (currentIframeElement && currentIframeElement.parentNode) {
+    currentIframeElement.src = 'about:blank';
+    currentIframeElement.parentNode.removeChild(currentIframeElement);
+    currentIframeElement = null;
+  }
 
-  // Flush any lingering memory from previous session
-  destroyCurrentIframe();
-
-  // Create brand-new, clean iframe element
   const iframe = document.createElement('iframe');
-  iframe.id = 'game-iframe';
-  iframe.setAttribute('referrerpolicy', 'no-referrer');
-  iframe.setAttribute('allow', 'fullscreen; autoplay; gamepad; keyboard; accelerometer; gyroscope; xr-spatial-tracking');
-  iframe.setAttribute('allowfullscreen', 'true');
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  iframe.style.display = 'block';
-
-  const hideLoader = () => {
-    if (frameLoader) frameLoader.style.display = 'none';
-  };
+  iframe.className = 'game-iframe';
+  iframe.id = 'active-game-frame';
+  iframe.setAttribute('allow', 'autoplay; fullscreen; keyboard; gamepad; focus-without-user-activation *');
+  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms allow-pointer-lock allow-downloads');
+  iframe.setAttribute('tabindex', '0');
 
   iframe.onload = () => {
-    hideLoader();
+    if (frameLoader) frameLoader.style.display = 'none';
     try {
       iframe.focus();
-      if (iframe.contentWindow) {
-        iframe.contentWindow.focus();
-      }
-    } catch (e) {}
+      if (iframe.contentWindow) iframe.contentWindow.focus();
+    } catch (err) {}
   };
-
-  iframe.onerror = () => {
-    hideLoader();
-  };
-
-  // Dismiss loader automatically after 1.5s
-  setTimeout(hideLoader, 1500);
 
   iframe.src = normalizedUrl;
-  if (playerFrameWrap) playerFrameWrap.appendChild(iframe);
   currentIframeElement = iframe;
+  playerFrameWrap.appendChild(iframe);
+
+  if (gamePlayerView) gamePlayerView.style.display = 'flex';
+  if (frostyView) frostyView.style.display = 'none';
+  document.title = activeGameTitle + ' - Frosty';
 }
 
 function closeGamePlayer() {
-  if (document.fullscreenElement) {
-    try {
-      document.exitFullscreen().catch(() => {});
-    } catch (e) {}
+  if (currentIframeElement && currentIframeElement.parentNode) {
+    currentIframeElement.src = 'about:blank';
+    currentIframeElement.parentNode.removeChild(currentIframeElement);
+    currentIframeElement = null;
   }
-  gamePlayerView.style.display = 'none';
-  
-  // Wipe out iframe from DOM to completely purge WebGL, AudioContext, and WASM memory
-  destroyCurrentIframe();
+
   activeGameUrl = null;
   activeGameTitle = '';
+
+  if (gamePlayerView) gamePlayerView.style.display = 'none';
+  if (frostyView) frostyView.style.display = 'flex';
+  document.title = 'Frosty';
 }
 
 function reloadCurrentGame() {
-  if (activeGameUrl && activeGameTitle) {
-    launchGame(activeGameTitle, activeGameUrl);
+  if (currentIframeElement && activeGameUrl) {
+    if (frameLoader) frameLoader.style.display = 'flex';
+    currentIframeElement.src = 'about:blank';
+    setTimeout(() => {
+      if (currentIframeElement) {
+        currentIframeElement.src = activeGameUrl;
+      }
+    }, 50);
   }
 }
 
 function toggleGameFullscreen() {
+  if (!gamePlayerView) return;
   if (!document.fullscreenElement) {
-    gamePlayerView.requestFullscreen().catch(() => {});
+    if (gamePlayerView.requestFullscreen) {
+      gamePlayerView.requestFullscreen();
+    }
   } else {
-    document.exitFullscreen().catch(() => {});
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
   }
 }
 
 /* ============================================================================
-   EVENT LISTENERS & DELEGATION
+   GLOBAL EVENT BINDINGS
    ============================================================================ */
-function setupEvents() {
-  // Calculator Mode Switcher
+document.addEventListener('DOMContentLoaded', () => {
+  checkInitialAccess();
+
+  // Search input handler
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentSearchQuery = e.target.value;
+      updateGamesDisplay();
+    });
+  }
+
+  // Calculator buttons
+  document.querySelectorAll('.calc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.getAttribute('data-val');
+      if (val) handleCalculatorInput(val);
+    });
+  });
+
+  // Mode toggles
   document.querySelectorAll('.calc-mode-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.calc-mode-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      calcMode = btn.dataset.mode;
-
-      if (calcMode === 'alphabet') {
-        alphaKeypad.style.display = 'grid';
-        sciKeypad.style.display = 'none';
-      } else if (calcMode === 'scientific') {
-        sciKeypad.style.display = 'grid';
-        alphaKeypad.style.display = 'none';
-      } else {
-        alphaKeypad.style.display = 'none';
-        sciKeypad.style.display = 'none';
-      }
+      const mode = btn.getAttribute('data-mode');
+      if (mode === 'standard') handleCalculatorInput('MODE_STANDARD');
+      if (mode === 'scientific') handleCalculatorInput('MODE_SCIENTIFIC');
+      if (mode === 'alphabet') handleCalculatorInput('MODE_ALPHABET');
     });
   });
 
-  // Calculator On-Screen Clicks
-  document.querySelectorAll('.calc-key, .alpha-key').forEach(key => {
-    key.addEventListener('click', () => {
-      const val = key.dataset.val;
-      if (val) {
-        handleCalculatorInput(val);
-      }
-    });
-  });
+  // Game player controls
+  const backBtn = document.getElementById('player-back-btn');
+  const reloadBtn = document.getElementById('player-reload-btn');
+  const fsBtn = document.getElementById('player-fullscreen-btn');
+  if (backBtn) backBtn.addEventListener('click', closeGamePlayer);
+  if (reloadBtn) reloadBtn.addEventListener('click', reloadCurrentGame);
+  if (fsBtn) fsBtn.addEventListener('click', toggleGameFullscreen);
 
-  // Scientific On-Screen Clicks
-  document.querySelectorAll('.sci-key').forEach(key => {
-    key.addEventListener('click', () => {
-      const func = key.dataset.func;
-      if (func) {
-        handleScientificFunc(func);
-      }
-    });
-  });
-
-  // Frosty Nav Buttons
-  const navHome = document.getElementById('nav-home-btn');
-  const navGames = document.getElementById('nav-games-btn');
-  const navCopy = document.getElementById('nav-copy-btn');
-  const heroGames = document.getElementById('hero-games-btn');
-  const heroCopy = document.getElementById('hero-copy-btn');
-  const brandHome = document.getElementById('brand-home-link');
-
-  if (navHome) navHome.addEventListener('click', () => switchFrostySection('home'));
-  if (navGames) navGames.addEventListener('click', () => switchFrostySection('games'));
-  if (navCopy) navCopy.addEventListener('click', () => switchFrostySection('copy'));
-  if (brandHome) brandHome.addEventListener('click', () => switchFrostySection('home'));
-
-  if (heroGames) heroGames.addEventListener('click', () => switchFrostySection('games'));
-  if (heroCopy) heroCopy.addEventListener('click', () => switchFrostySection('copy'));
-
-  // Category Filter Pills in Games Section
-  document.querySelectorAll('.filter-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-      currentCategoryFilter = pill.dataset.filter || 'all';
-      updateGamesDisplay();
-    });
-  });
-
-  // Category Filter Tabs in Copy Section
-  document.querySelectorAll('.copy-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const type = btn.dataset.copyType || 'all';
-      renderCopySectionList(type);
-    });
-  });
-
-  // Copy Section Action Buttons
-  const sectionCopyActionBtn = document.getElementById('section-copy-action-btn');
-  const sectionSelectAllBtn = document.getElementById('section-select-all-btn');
-  const sectionCopyTextarea = document.getElementById('section-copy-textarea');
-  const sectionCopyBadge = document.getElementById('section-copy-badge');
-  const sectionCopyBtnText = document.getElementById('section-copy-btn-text');
-
-  if (sectionCopyActionBtn) {
-    sectionCopyActionBtn.addEventListener('click', () => {
-      copyTextFromElement(sectionCopyTextarea, sectionCopyBadge, sectionCopyBtnText);
-    });
-  }
-
-  if (sectionSelectAllBtn && sectionCopyTextarea) {
-    sectionSelectAllBtn.addEventListener('click', () => {
-      sectionCopyTextarea.focus();
-      sectionCopyTextarea.select();
-    });
-  }
-
-  // Modal Controls
-  const modalClose = document.getElementById('modal-close-btn');
-  const modalCancel = document.getElementById('modal-cancel-btn');
-
-  if (modalClose) modalClose.addEventListener('click', closeCopyGamesMenuModal);
-  if (modalCancel) modalCancel.addEventListener('click', closeCopyGamesMenuModal);
-  if (copyActionBtn) {
-    copyActionBtn.addEventListener('click', () => {
-      copyTextFromElement(copyTextarea, copyStatusBadge, copyBtnText);
-    });
-  }
+  // Copy modal actions
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const modalCancelBtn = document.getElementById('modal-cancel-btn');
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeCopyGamesModal);
+  if (modalCancelBtn) modalCancelBtn.addEventListener('click', closeCopyGamesModal);
 
   if (copyModal) {
     copyModal.addEventListener('click', (e) => {
-      if (e.target === copyModal) closeCopyGamesMenuModal();
+      if (e.target === copyModal) closeCopyGamesModal();
     });
   }
 
-  // Modal Tab Switching
-  document.querySelectorAll('.modal-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const type = tab.dataset.type || 'all';
-      renderCopySectionList(type);
-    });
-  });
-
-  // Player Controls
-  const playerBackBtn = document.getElementById('player-back-btn');
-  const playerReloadBtn = document.getElementById('player-reload-btn');
-  const playerFullscreenBtn = document.getElementById('player-fullscreen-btn');
-
-  if (playerBackBtn) playerBackBtn.addEventListener('click', closeGamePlayer);
-  if (playerReloadBtn) playerReloadBtn.addEventListener('click', reloadCurrentGame);
-  if (playerFullscreenBtn) playerFullscreenBtn.addEventListener('click', toggleGameFullscreen);
-
-  // Event Delegation for Games Grid
-  if (gamesGrid) {
-    gamesGrid.addEventListener('click', (e) => {
-      const card = e.target.closest('.game-card');
-      if (card) {
-        const name = card.getAttribute('data-name');
-        const file = card.getAttribute('data-file');
-        if (name && file) {
-          launchGame(name, file);
+  if (copyActionBtn) {
+    copyActionBtn.addEventListener('click', () => {
+      if (copyTextarea) {
+        copyTextarea.focus();
+        copyTextarea.select();
+        try {
+          navigator.clipboard.writeText(copyTextarea.value).then(() => {
+            if (copyStatusBadge) copyStatusBadge.style.display = 'inline-block';
+            if (copyBtnText) copyBtnText.textContent = '✓ Copied!';
+            setTimeout(() => {
+              if (copyStatusBadge) copyStatusBadge.style.display = 'none';
+              if (copyBtnText) copyBtnText.textContent = 'Copy ' + ALL_GAMES_REGISTRY.length + ' Games';
+            }, 2500);
+          });
+        } catch (err) {
+          document.execCommand('copy');
+          if (copyStatusBadge) copyStatusBadge.style.display = 'inline-block';
         }
       }
     });
   }
 
-  // Search Input for Games
-  if (searchInput) {
-    let searchRaf = null;
-    searchInput.addEventListener('input', (e) => {
-      currentSearchQuery = e.target.value.toLowerCase().trim();
-      if (searchRaf) cancelAnimationFrame(searchRaf);
-      searchRaf = requestAnimationFrame(() => {
-        updateGamesDisplay();
-      });
-    });
-  }
-
-  // GLOBAL KEYBOARD SHORTCUTS HANDLER
+  // GLOBAL KEYBOARD SHORTCUTS
   window.addEventListener('keydown', (e) => {
-    // Capture Ctrl+Shift+J or Cmd+Shift+J to switch to Copy List section
-    const isJKey = e.key && (e.key.toLowerCase() === 'j' || e.code === 'KeyJ');
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && isJKey) {
+    // Exclusive Shortcut: Ctrl+Shift+J or Cmd+Shift+J opens the Numbered Games Catalog Modal
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'J' || e.key === 'j')) {
       e.preventDefault();
-      e.stopPropagation();
-      switchFrostySection('copy');
+      toggleCopyGamesModal();
       return;
     }
 
-    // Escape handling
-    if (copyModal && copyModal.style.display === 'flex' && e.key === 'Escape') {
-      e.preventDefault();
-      closeCopyGamesMenuModal();
+    // Escape closes modal
+    if (e.key === 'Escape' && copyModal && copyModal.style.display === 'flex') {
+      closeCopyGamesModal();
       return;
     }
 
-    // 3. If game player is open and user presses Escape, close the game player
-    if (gamePlayerView && gamePlayerView.style.display === 'flex') {
-      if (e.key === 'Escape') {
+    // Calculator typing support if calculator view is active
+    if (calculatorView && calculatorView.style.display !== 'none') {
+      if (e.key === 'Enter') {
         e.preventDefault();
-        closeGamePlayer();
-        return;
+        handleCalculatorInput('=');
+      } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        handleCalculatorInput('BACK');
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        handleCalculatorInput('CLEAR');
+      } else if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        const char = e.key.toUpperCase();
+        if (/^[0-9A-Z+\-*/.()=%]$/.test(char)) {
+          handleCalculatorInput(char);
+        }
       }
     }
-
-    // If not on calculator, do not intercept typing
-    const isUnlocked = localStorage.getItem('frosty_unlocked') === 'true';
-    if (isUnlocked) return;
-
-    // Disregard keyboard shortcuts with Cmd/Ctrl/Alt
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
-
-    if (e.key === 'Enter' || e.key === '=') {
-      e.preventDefault();
-      checkSecretOrEvaluate();
-    } else if (e.key === 'Backspace') {
-      e.preventDefault();
-      handleCalculatorInput('BACK');
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      handleCalculatorInput('CLEAR');
-    } else if (/^[0-9+\-*/.()]$/.test(e.key)) {
-      handleCalculatorInput(e.key);
-    } else if (/^[a-zA-Z]$/.test(e.key)) {
-      handleCalculatorInput(e.key.toUpperCase());
-    }
   });
-}
-
-// Initialize on DOM Ready or immediately if already loaded
-function initApp() {
-  setupEvents();
-  checkInitialAccess();
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  initApp();
-}
+});
