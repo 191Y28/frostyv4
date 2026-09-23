@@ -1,0 +1,8 @@
+{
+  "name": "Frosty Calculator V2",
+  "description": "Fast, unblocked web game hub featuring instant Flash emulation powered by Ruffle.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

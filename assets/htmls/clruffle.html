@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ruffle Player</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #090b10;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    #player-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      z-index: 10;
+    }
+
+    ruffle-player {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+    }
+
+    /* Floating control bar for active game */
+    #floating-bar {
+      position: fixed;
+      top: 10px;
+      right: 12px;
+      z-index: 50;
+      display: none;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 6px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      transition: opacity 0.2s ease;
+      opacity: 0.35;
+    }
+    #floating-bar:hover {
+      opacity: 1;
+    }
+    .float-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .float-btn:hover {
+      background: rgba(59, 130, 246, 0.6);
+      border-color: #3b82f6;
+    }
+
+    /* Standalone Hub UI */
+    #hub-view {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      padding: 24px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hub-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .hub-header {
+      text-align: center;
+      padding: 12px 0 6px;
+    }
+    .hub-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+    .hub-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .hub-sub {
+      color: #94a3b8;
+      font-size: 14px;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* Tools Section: Custom URL & File upload */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 640px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .tool-card {
+      background: #131b2e;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tool-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tool-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .tool-input {
+      flex: 1;
+      background: #0b1120;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .tool-input:focus {
+      border-color: #3b82f6;
+    }
+    .tool-btn {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tool-btn:hover {
+      background: #1d4ed8;
+    }
+    .file-drop-area {
+      border: 2px dashed #334155;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: #0b1120;
+    }
+    .file-drop-area:hover, .file-drop-area.dragover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.08);
+      color: #cbd5e1;
+    }
+
+    /* Games Library */
+    .library-section {
+      background: #131b2e;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .library-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .library-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .search-input {
+      background: #0b1120;
+      border: 1px solid #334155;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      width: 220px;
+    }
+    .search-input:focus {
+      border-color: #3b82f6;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .game-card-btn {
+      background: #0b1120;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      color: inherit;
+    }
+    .game-card-btn:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      background: #152238;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .card-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+      line-height: 1.3;
+    }
+    .card-badge {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Loading overlay */
+    #loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 20;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script>
+    // Universal Ruffle Global Config
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+      autoplay: "on",
+      unmuteOverlay: "hidden",
+      letterbox: "on",
+      warnOnUnsupportedContent: false,
+      contextMenu: "on",
+      showSwfDownload: false,
+      upgradeToHttps: false,
+      maxExecutionDuration: 30,
+      splashScreen: false,
+      scale: "showAll",
+      quality: "high"
+    };
+  </script>
+  <!-- Try local primary bundle first -->
+  <script src="../ruffle/ruffle.js" onerror="loadBackupRuffle()"></script>
+  <script>
+    function loadBackupRuffle() {
+      if (!window.RufflePlayer || !window.RufflePlayer.newest) {
+        console.warn("Primary Ruffle script failed or missing, loading CDN fallback...");
+        const s = document.createElement("script");
+        s.src = "https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js";
+        s.onerror = function() {
+          const s2 = document.createElement("script");
+          s2.src = "https://unpkg.com/@ruffle-rs/ruffle";
+          document.head.appendChild(s2);
+        };
+        document.head.appendChild(s);
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Floating quick controls for active game -->
+  <div id="floating-bar">
+    <button class="float-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button class="float-btn" onclick="reloadCurrentSwf()">↻ Restart</button>
+    <button class="float-btn" onclick="openHub()">☰ Library</button>
+  </div>
+
+  <!-- Loading State -->
+  <div id="loading-spinner">
+    <div class="spinner"></div>
+    <div id="loading-text">Initializing Ruffle Emulator...</div>
+  </div>
+
+  <!-- Fullscreen Player Viewport -->
+  <div id="player-container"></div>
+
+  <!-- Standalone Hub UI (when no ?swf param is provided or library is opened) -->
+  <div id="hub-view">
+    <div class="hub-container">
+      <div class="hub-header">
+        <div class="hub-badge">⚡ WebAssembly Emulator</div>
+        <h1 class="hub-title">Ruffle Flash Player</h1>
+        <p class="hub-sub">Fast, unblocked Flash emulation. Launch any built-in classic or load your own SWF file.</p>
+      </div>
+
+      <!-- Custom Input / Drag Drop -->
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-title">🔗 Load SWF by URL</div>
+          <div class="tool-input-row">
+            <input type="text" id="custom-swf-url" class="tool-input" placeholder="https://example.com/game.swf" />
+            <button class="tool-btn" onclick="loadFromInputUrl()">Play</button>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-title">📁 Play Local .SWF File</div>
+          <div class="file-drop-area" id="drop-zone" onclick="document.getElementById('file-picker').click()">
+            Drag & drop a <b>.swf</b> file here, or click to browse
+            <input type="file" id="file-picker" accept=".swf" style="display:none" onchange="handleFileSelect(event)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Built-in Flash Games Library -->
+      <div class="library-section">
+        <div class="library-header">
+          <div class="library-title">Built-In Flash Classics (<span id="games-total-count">0</span>)</div>
+          <input type="text" id="filter-input" class="search-input" placeholder="Search Flash games..." oninput="filterGamesList()" />
+        </div>
+
+        <div class="games-grid" id="games-list-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // List of built-in SWF / Flash games
+    const BUILTIN_GAMES = [
+      { name: "Papa Louie: When Pizzas Attack!", swf: "../swfs/papalouie.swf", category: "Action / Platformer", icon: "🍕" },
+      { name: "Papa Louie 2: When Burgers Attack!", swf: "../swfs/papalouie2.swf", category: "Action / Platformer", icon: "🍔" },
+      { name: "Papa Louie 3: When Sundaes Attack!", swf: "../swfs/papalouie3.swf", category: "Action / Platformer", icon: "🍨" },
+      { name: "Cactus McCoy and the Curse of Thorns", swf: "../swfs/cactusmccoy.swf", category: "Brawler / Action", icon: "🌵" },
+      { name: "Cactus McCoy 2: The Ruins of Calavera", swf: "../swfs/cactusmccoy2.swf", category: "Brawler / Action", icon: "🤠" },
+      { name: "Achievement Unlocked", swf: "../swfs/achievement-unlocked.swf", category: "Puzzle / Platformer", icon: "🏆" },
+      { name: "Achievement Unlocked 2", swf: "../swfs/achievement-unlocked-2.swf", category: "Puzzle / Platformer", icon: "⭐" },
+      { name: "Achievement Unlocked 3", swf: "../swfs/achievement-unlocked-3.swf", category: "Puzzle / Platformer", icon: "🎖️" },
+      { name: "Absolute Madness", swf: "../swfs/absolutemadness.swf", category: "Shooter / Action", icon: "🔥" },
+      { name: "Bob The Robber", swf: "../swfs/bob-the-robber.swf", category: "Stealth / Puzzle", icon: "🕶️" },
+      { name: "Boxing Live 2", swf: "../swfs/boxinglive2.swf", category: "Sports / Fighting", icon: "🥊" },
+      { name: "Angry Birds Space", swf: "../swfs/angrybirdsspace.swf", category: "Physics / Arcade", icon: "🚀" },
+      { name: "Hanger 2", swf: "https://cdn.jsdelivr.net/gh/Stinkalistic/UGS@main/SWFs/hanger2.swf", category: "Physics / Ragdoll", icon: "🪢" },
+      { name: "Shift", swf: "https://cdn.jsdelivr.net/gh/Stinkalistic/UGS@main/SWFs/422855_Shiftfla5.swf", category: "Puzzle / Inversion", icon: "🔳" },
+      { name: "Shift 2", swf: "https://cdn.jsdelivr.net/gh/Stinkalistic/UGS@main/SWFs/shift2.swf", category: "Puzzle / Inversion", icon: "🏁" },
+      { name: "Johnny Upgrade", swf: "https://cdn.jsdelivr.net/gh/abdufarooq7272/Node-Binary@112f779333f99912e19cb423bf1293687a89b5cf/scripts/rpm/jup.js", category: "Upgrades / Platformer", icon: "⚡" }
+    ];
+
+    let currentSwfUrl = null;
+    let currentPlayer = null;
+
+    function renderGamesList(filtered) {
+      const list = filtered || BUILTIN_GAMES;
+      const countEl = document.getElementById("games-total-count");
+      if (countEl) countEl.textContent = list.length;
+      const grid = document.getElementById("games-list-grid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      list.forEach(game => {
+        const btn = document.createElement("button");
+        btn.className = "game-card-btn";
+        btn.innerHTML = `
+          <div class="card-icon">${game.icon}</div>
+          <div class="card-name">${game.name}</div>
+          <div class="card-badge">${game.category}</div>
+        `;
+        btn.onclick = () => {
+          loadSwf(game.swf, game.name);
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function filterGamesList() {
+      const q = (document.getElementById("filter-input")?.value || "").toLowerCase().trim();
+      if (!q) {
+        renderGamesList(BUILTIN_GAMES);
+      } else {
+        const filtered = BUILTIN_GAMES.filter(g => g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q));
+        renderGamesList(filtered);
+      }
+    }
+
+    function getQueryParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has(name)) return params.get(name);
+      // Hash fallback
+      const hash = window.location.hash.substring(1);
+      const hashParams = new URLSearchParams(hash);
+      return hashParams.get(name);
+    }
+
+    function showSpinner(text) {
+      const sp = document.getElementById("loading-spinner");
+      const txt = document.getElementById("loading-text");
+      if (sp) sp.style.display = "flex";
+      if (txt && text) txt.textContent = text;
+    }
+
+    function hideSpinner() {
+      const sp = document.getElementById("loading-spinner");
+      if (sp) sp.style.display = "none";
+    }
+
+    function waitForRuffle(callback, maxAttempts = 80) {
+      let attempts = 0;
+      function check() {
+        const ruffle = window.RufflePlayer && window.RufflePlayer.newest ? window.RufflePlayer.newest() : null;
+        if (ruffle) {
+          callback(ruffle);
+        } else {
+          attempts++;
+          if (attempts < maxAttempts) {
+            setTimeout(check, 50);
+          } else {
+            console.warn("Ruffle took longer than expected, attempting fallback load...");
+            loadBackupRuffle();
+            setTimeout(() => {
+              const r2 = window.RufflePlayer && window.RufflePlayer.newest ? window.RufflePlayer.newest() : null;
+              if (r2) callback(r2);
+              else {
+                hideSpinner();
+                alert("Failed to initialize Flash emulator. Please check your network connection.");
+              }
+            }, 1000);
+          }
+        }
+      }
+      check();
+    }
+
+    function loadSwf(swfUrl, title) {
+      if (!swfUrl) return;
+      currentSwfUrl = swfUrl;
+      if (title) document.title = title + " - Ruffle Player";
+
+      document.getElementById("hub-view").style.display = "none";
+      const container = document.getElementById("player-container");
+      container.style.display = "flex";
+      container.innerHTML = "";
+      document.getElementById("floating-bar").style.display = "flex";
+
+      showSpinner("Loading " + (title || "Flash Game") + "...");
+
+      waitForRuffle((ruffle) => {
+        try {
+          const player = ruffle.createPlayer();
+          player.style.width = "100%";
+          player.style.height = "100%";
+          container.appendChild(player);
+          currentPlayer = player;
+
+          player.load({
+            url: swfUrl,
+            allowScriptAccess: true
+          }).then(() => {
+            hideSpinner();
+            try { player.focus(); } catch (e) {}
+          }).catch(err => {
+            console.error("Player load failed:", err);
+            hideSpinner();
+          });
+
+          // Focus grabbers
+          window.addEventListener("click", () => {
+            try { player.focus(); } catch (e) {}
+          });
+          window.addEventListener("keydown", () => {
+            try { player.focus(); } catch (e) {}
+          });
+
+          setTimeout(hideSpinner, 1500);
+        } catch (e) {
+          console.error("Failed to create Ruffle player:", e);
+          hideSpinner();
+        }
+      });
+    }
+
+    function reloadCurrentSwf() {
+      if (currentSwfUrl) {
+        loadSwf(currentSwfUrl, document.title.replace(" - Ruffle Player", ""));
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function openHub() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      const container = document.getElementById("player-container");
+      container.style.display = "none";
+      container.innerHTML = "";
+      document.getElementById("floating-bar").style.display = "none";
+      document.getElementById("hub-view").style.display = "flex";
+      hideSpinner();
+      currentPlayer = null;
+    }
+
+    function loadFromInputUrl() {
+      const url = document.getElementById("custom-swf-url")?.value?.trim();
+      if (!url) return;
+      loadSwf(url, "Custom Game");
+    }
+
+    function handleFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const objectUrl = URL.createObjectURL(file);
+      const name = file.name.replace(/\.swf$/i, "");
+      loadSwf(objectUrl, name);
+    }
+
+    // Drag and Drop
+    const dropZone = document.getElementById("drop-zone");
+    if (dropZone) {
+      ["dragenter", "dragover"].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropZone.classList.add("dragover");
+        });
+      });
+      ["dragleave", "drop"].forEach(name => {
+        dropZone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove("dragover");
+        });
+      });
+      dropZone.addEventListener("drop", (e) => {
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) {
+          const objectUrl = URL.createObjectURL(file);
+          const name = file.name.replace(/\.swf$/i, "");
+          loadSwf(objectUrl, name);
+        }
+      });
+    }
+
+    // Initialization
+    window.addEventListener("DOMContentLoaded", () => {
+      renderGamesList();
+
+      const swfParam = getQueryParam("swf") || getQueryParam("url");
+      const titleParam = getQueryParam("title");
+
+      if (swfParam) {
+        loadSwf(swfParam, titleParam || "Flash Game");
+      }
+    });
+  </script>
+</body>
+</html>

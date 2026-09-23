@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Agar.io</title>
+  <script src="https://cdn.jsdelivr.net/gh/234sd4w5w45wers5tr-645758574456456/436874@80f8732e80020f5e1985fc807267ed0637e230a7/jquery-latest.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/gh/234sd4w5w45wers5tr-645758574456456/436874@80f8732e80020f5e1985fc807267ed0637e230a7/etc.js"></script> 
+  <script src="https://cdn.jsdelivr.net/gh/234sd4w5w45wers5tr-645758574456456/436874@80f8732e80020f5e1985fc807267ed0637e230a7/circle-game.js"></script> 
+  <script type="text/javascript">
+    $(document).ready(function() {
+      if (typeof isCanvasSupported === 'function' && isCanvasSupported()) {
+        cg.init();
+      } else {
+        $(document.body).html("<p style='color:white; text-align:center; padding:20px;'>HTML5 Canvas is required to run this game.</p>");
+      }
+    });
+  </script> 
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: black;
+    }
+    canvas {
+      display: block;
+      background-color: black;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style> 
+</head>
+<body>
+  <canvas></canvas>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!doctype html>
+<!-- Ultimate Game Stash file-->
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+
+
+<html lang="en-us">
+  <head>
+    <base
+      href="https://cdn.jsdelivr.net/gh/bubblfan/cg-rip@main/buildnow-gg/"
+    />
+    <meta charset="utf-8" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Build Now GG</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0f172a;
+        color: #fff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      #loading-container {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        background: #0f172a;
+      }
+      #loading-text {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        margin-bottom: 12px;
+      }
+      #loading-bar-bg {
+        width: 280px;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+      #loading-bar-fill {
+        width: 0%;
+        height: 100%;
+        background: #38bdf8;
+        transition: width 0.2s ease;
+        border-radius: 9999px;
+      }
+      #unity-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body class="noselect">
+    <div id="loading-container">
+      <div id="loading-text">LOADING... 0%</div>
+      <div id="loading-bar-bg">
+        <div id="loading-bar-fill"></div>
+      </div>
+    </div>
+    <canvas id="unity-canvas"></canvas>
+
+    <script>
+      const SPLIT_FILES = {
+        "7db022abd161455e3cc5f207e75d294b.wasm": 3,
+        "ab8dd356a41a2943639294657a0990f8.data": 3,
+      };
+
+      async function fetchMergedBuffer(filename, partCount, onProgress) {
+        const parts = [];
+        for (let i = 1; i <= partCount; i++) {
+          parts.push(`Build/${filename}.part${i}`);
+        }
+
+        let loadedCount = 0;
+        const buffers = await Promise.all(
+          parts.map(async (partUrl) => {
+            const resp = await fetch(partUrl);
+            if (!resp.ok) {
+              throw new Error(`Failed to load ${partUrl} (${resp.status})`);
+            }
+            const buf = await resp.arrayBuffer();
+            loadedCount++;
+            if (onProgress) onProgress(loadedCount / partCount);
+            return new Uint8Array(buf);
+          })
+        );
+
+        const totalLength = buffers.reduce((sum, b) => sum + b.length, 0);
+        const merged = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const b of buffers) {
+          merged.set(b, offset);
+          offset += b.length;
+        }
+        return URL.createObjectURL(new Blob([merged]));
+      }
+
+      async function preMergeAll() {
+        const map = {};
+        const entries = Object.entries(SPLIT_FILES);
+        const total = entries.length;
+        let completed = 0;
+
+        const textEl = document.getElementById("loading-text");
+        const barEl = document.getElementById("loading-bar-fill");
+
+        for (const [file, parts] of entries) {
+          const blobUrl = await fetchMergedBuffer(file, parts, (subProgress) => {
+            const overall = ((completed + subProgress) / total) * 100;
+            const pct = Math.min(99, Math.floor(overall));
+            if (textEl) textEl.innerText = `LOADING... ${pct}%`;
+            if (barEl) barEl.style.width = `${pct}%`;
+          });
+          map[file] = blobUrl;
+          completed++;
+        }
+
+        if (textEl) textEl.innerText = "INITIALIZING...";
+        if (barEl) barEl.style.width = "100%";
+        return map;
+      }
+
+      (async () => {
+        try {
+          const mergedMap = await preMergeAll();
+          window.SPLIT_MAP = mergedMap;
+
+          const origFetch = window.fetch;
+          window.fetch = async function (resource, options) {
+            const urlStr = typeof resource === "string" ? resource : (resource && resource.url ? resource.url : "");
+            if (urlStr) {
+              const key = urlStr.split("?")[0].split("/").pop();
+              if (mergedMap[key]) {
+                return origFetch(mergedMap[key], options);
+              }
+            }
+            return origFetch(resource, options);
+          };
+
+          const OrigXHR = window.XMLHttpRequest;
+          window.XMLHttpRequest = function () {
+            const xhr = new OrigXHR();
+            const origOpen = xhr.open;
+            xhr.open = function (method, url, ...rest) {
+              const urlStr = typeof url === "string" ? url : (url ? String(url) : "");
+              const key = urlStr.split("?")[0].split("/").pop();
+              if (mergedMap[key]) {
+                origOpen.call(xhr, method, mergedMap[key], ...rest);
+              } else {
+                origOpen.call(xhr, method, url, ...rest);
+              }
+            };
+            return xhr;
+          };
+
+          const canvas = document.querySelector("#unity-canvas");
+          const loaderUrl = "Build/7a2dbded24d57e056180125b1583e7c4.loader.js";
+          const config = {
+            dataUrl: mergedMap["ab8dd356a41a2943639294657a0990f8.data"] || "Build/ab8dd356a41a2943639294657a0990f8.data",
+            frameworkUrl: "Build/91a2bfcec140bc524100478b99a4f6d7.framework.js",
+            codeUrl: mergedMap["7db022abd161455e3cc5f207e75d294b.wasm"] || "Build/7db022abd161455e3cc5f207e75d294b.wasm",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "BuildNow GG",
+            productName: "BuildNow GG",
+            productVersion: "1.0.0",
+          };
+
+          const script = document.createElement("script");
+          script.src = loaderUrl;
+          script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+              if (progress >= 1) {
+                const container = document.getElementById("loading-container");
+                if (container) container.style.display = "none";
+              }
+            })
+              .then((unityInstance) => {
+                window.gameInstance = unityInstance;
+                const container = document.getElementById("loading-container");
+                if (container) container.style.display = "none";
+              })
+              .catch((message) => {
+                console.error("Unity init error:", message);
+              });
+          };
+          document.body.appendChild(script);
+        } catch (err) {
+          console.error("Premerge error:", err);
+          const textEl = document.getElementById("loading-text");
+          if (textEl) textEl.innerText = "Error loading assets.";
+        }
+      })();
+    </script>
+
+    <script>
+      function resizeCanvas() {
+        const canvas = document.getElementById("unity-canvas");
+        if (canvas) {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          canvas.style.width = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+        }
+      }
+      window.addEventListener("load", resizeCanvas);
+      window.addEventListener("resize", resizeCanvas);
+    </script>
+  </body>
+</html>

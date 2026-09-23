@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ruffle Player</title>
+  <script>
+    // Forward query parameters to assets/htmls/clruffle.html
+    const search = window.location.search;
+    const hash = window.location.hash;
+    window.location.replace("assets/htmls/clruffle.html" + search + hash);
+  </script>
+</head>
+<body>
+  <p style="color:#fff;background:#000;font-family:sans-serif;padding:20px;">Loading Ruffle Player... <a href="assets/htmls/clruffle.html" style="color:#38bdf8">Click here if not redirected</a></p>
+</body>
+</html>

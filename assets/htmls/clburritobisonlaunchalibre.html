@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!-- Ultimate Game Stash file--> 
+<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
+<html lang="en-us">
+<head>
+    <base href="https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@main/BurritoBison-main/">
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Burrito Bison: Launcha Libre</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0f172a;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        #loading-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: #0f172a;
+        }
+
+        #loading-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 14px;
+        }
+
+        #loading-bar-bg {
+            width: 280px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        #loading-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #e11d48;
+            transition: width 0.2s ease;
+            border-radius: 9999px;
+        }
+
+        .webgl-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #gameContainer {
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0 !important;
+        }
+
+        #gameContainer canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-overlay">
+        <div id="loading-title">LOADING BURRITO BISON... 0%</div>
+        <div id="loading-bar-bg">
+            <div id="loading-bar-fill"></div>
+        </div>
+    </div>
+
+    <div class="webgl-content">
+        <div id="gameContainer"></div>
+    </div>
+
+    <script>
+    (function() {
+      'use strict';
+      const CDN_BASE = 'https://cdn.jsdelivr.net/gh/bubbls/UGS-Assets@main/BurritoBison-main/';
+      const filesToMerge = [
+        { name: 'burrito-bison-ll.data.unityweb', parts: 2 }, 
+        { name: 'burrito-bison-ll.asm.code.unityweb', parts: 2 },
+        { name: 'burrito-bison-ll.asm.memory.unityweb', parts: 1 },
+        { name: 'burrito-bison-ll.asm.framework.unityweb', parts: 1 },
+      ];
+
+      window.mergedFiles = window.mergedFiles || {};
+      const mergeStatus = {};
+
+      function normalizeUrl(url) {
+        try { return decodeURIComponent(url.toString().split('?')[0]); } catch (e) { return String(url); }
+      }
+
+      function shouldInterceptFile(url) {
+        const urlStr = normalizeUrl(url);
+        if (urlStr.includes('.part')) return null;
+        const filename = urlStr.split('/').pop();
+        for (const file of filesToMerge) {
+          if (file.name === filename) return file.name;
+        }
+        return null;
+      }
+
+      function getMergedBuffer(filename) {
+        return window.mergedFiles[filename] || null;
+      }
+
+      // Hook fetch
+      const origFetch = window.fetch;
+      window.fetch = function(url, ...args) {
+        const filename = shouldInterceptFile(url);
+        if (filename && window.mergedFiles[filename]) {
+          return Promise.resolve(new Response(window.mergedFiles[filename], {
+            status: 200,
+            statusText: 'OK',
+            headers: { 'Content-Type': 'application/octet-stream' }
+          }));
+        }
+        return origFetch.call(this, url, ...args);
+      };
+
+      // Hook XMLHttpRequest
+      const OrigXHR = window.XMLHttpRequest;
+      window.XMLHttpRequest = function(options) {
+        const xhr = new OrigXHR(options);
+        const originalOpen = xhr.open;
+        const originalSend = xhr.send;
+        let requestUrl = '';
+
+        xhr.open = function(method, url, ...args) {
+          requestUrl = url;
+          return originalOpen.call(this, method, url, ...args);
+        };
+
+        xhr.send = function(...args) {
+          const filename = shouldInterceptFile(requestUrl);
+          if (filename) {
+            const checkAndRespond = () => {
+              const buffer = getMergedBuffer(filename);
+              if (buffer) {
+                Object.defineProperties(xhr, {
+                  status: { value: 200, writable: true },
+                  statusText: { value: 'OK', writable: true },
+                  response: { value: buffer, writable: true },
+                  responseText: { value: '', writable: true },
+                  readyState: { value: 4, writable: true },
+                  responseURL: { value: requestUrl, writable: true }
+                });
+
+                xhr.getResponseHeader = function(name) {
+                  if (name && name.toLowerCase() === 'etag') return '"merged"';
+                  if (name && name.toLowerCase() === 'last-modified') return new Date().toUTCString();
+                  return null;
+                };
+                xhr.getAllResponseHeaders = function() {
+                  return 'last-modified: ' + new Date().toUTCString() + '\r\netag: "merged"\r\ncontent-type: application/octet-stream\r\n';
+                };
+
+                setTimeout(() => {
+                  try { xhr.dispatchEvent(new Event('readystatechange')); } catch(e) {}
+                  try { xhr.dispatchEvent(new ProgressEvent('progress', { lengthComputable: true, loaded: buffer.byteLength, total: buffer.byteLength })); } catch(e) {}
+                  try { xhr.dispatchEvent(new Event('load')); } catch(e) {}
+                  if (typeof xhr.onreadystatechange === 'function') xhr.onreadystatechange();
+                  if (typeof xhr.onload === 'function') xhr.onload({ type: 'load', target: xhr });
+                }, 10);
+              } else if (mergeStatus[filename] === 'failed') {
+                if (typeof xhr.onerror === 'function') xhr.onerror(new Error('Merge failed for ' + filename));
+              } else {
+                setTimeout(checkAndRespond, 50);
+              }
+            };
+            checkAndRespond();
+            return;
+          }
+          return originalSend.call(this, ...args);
+        };
+        return xhr;
+      };
+
+      async function mergeSingleFile(fileObj, onProgress) {
+        const parts = [];
+        for (let i = 1; i <= fileObj.parts; i++) {
+          parts.push(`${CDN_BASE}${fileObj.name}.part${i}`);
+        }
+
+        let completedParts = 0;
+        const buffers = await Promise.all(parts.map(async (partUrl) => {
+          const resp = await origFetch(partUrl);
+          if (!resp.ok) throw new Error(`HTTP ${resp.status} on ${partUrl}`);
+          const buf = await resp.arrayBuffer();
+          completedParts++;
+          if (onProgress) onProgress(completedParts / fileObj.parts);
+          return buf;
+        }));
+
+        const totalSize = buffers.reduce((acc, b) => acc + b.byteLength, 0);
+        const mergedArray = new Uint8Array(totalSize);
+        let offset = 0;
+        for (const buf of buffers) {
+          mergedArray.set(new Uint8Array(buf), offset);
+          offset += buf.byteLength;
+        }
+        return mergedArray.buffer;
+      }
+
+      async function initAll() {
+        const titleEl = document.getElementById('loading-title');
+        const barEl = document.getElementById('loading-bar-fill');
+        const totalFiles = filesToMerge.length;
+        let finishedFiles = 0;
+
+        for (const file of filesToMerge) {
+          mergeStatus[file.name] = 'merging';
+          try {
+            const buf = await mergeSingleFile(file, (partFrac) => {
+              const overall = ((finishedFiles + partFrac) / totalFiles) * 100;
+              const pct = Math.min(99, Math.floor(overall));
+              if (titleEl) titleEl.innerText = `LOADING BURRITO BISON... ${pct}%`;
+              if (barEl) barEl.style.width = `${pct}%`;
+            });
+            window.mergedFiles[file.name] = buf;
+            mergeStatus[file.name] = 'ready';
+            finishedFiles++;
+          } catch (err) {
+            console.error('Failed to merge file:', file.name, err);
+            mergeStatus[file.name] = 'failed';
+            if (titleEl) titleEl.innerText = 'Error loading game assets.';
+            return;
+          }
+        }
+
+        if (titleEl) titleEl.innerText = 'STARTING ENGINE...';
+        if (barEl) barEl.style.width = '100%';
+
+        // Dynamically load Unity engine scripts now that files are cached in memory
+        const loadScript = (src) => new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = src;
+          s.onload = res;
+          s.onerror = rej;
+          document.body.appendChild(s);
+        });
+
+        try {
+          await loadScript('UnityProgress.js');
+          await loadScript('burrito-bison-ll.js');
+
+          const overlay = document.getElementById('loading-overlay');
+          const gameInstance = UnityLoader.instantiate('gameContainer', 'burrito-bison-ll.json', {
+            onProgress: function(instance, progress) {
+              if (typeof UnityProgress === 'function') {
+                UnityProgress(instance, progress);
+              }
+              if (progress >= 1 && overlay) {
+                overlay.style.display = 'none';
+              }
+            },
+            Module: {
+              onRuntimeInitialized: function() {
+                if (overlay) overlay.style.display = 'none';
+              }
+            }
+          });
+        } catch (e) {
+          console.error('Unity launch error:', e);
+        }
+      }
+
+      initAll();
+    })();
+    </script>
+</body>
+</html>

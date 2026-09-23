@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <base href="https://cdn.statically.io/gh/genizy/cg-rip@main/bank-robbery/">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Unity WebGL Player | Bank Robbery</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      #unity-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+      #loading-text {
+        color: #fff;
+        font-size: 32px;
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading-text">LOADING...</div>
+    <canvas id="unity-canvas"></canvas>
+
+    <script>
+    const SPLIT_MAP = {"BankRobbery.wasm": 2, "BankRobbery.data": 2};
+
+    const CDNS = [
+      "https://cdn.statically.io/gh/genizy/cg-rip@main/bank-robbery/",
+      "https://raw.githubusercontent.com/genizy/cg-rip/main/bank-robbery/"
+    ];
+
+    async function fetchPart(relativeUrl) {
+      for (const cdn of CDNS) {
+        try {
+          const r = await fetch(cdn + relativeUrl);
+          if (r.ok) {
+            return new Uint8Array(await r.arrayBuffer());
+          }
+        } catch (e) {
+          console.warn("Retrying part with secondary CDN:", relativeUrl);
+        }
+      }
+      throw new Error("Failed to load part: " + relativeUrl);
+    }
+
+    async function mergeParts(file, count) {
+      const partPromises = [];
+      for (let i = 1; i <= count; i++) {
+        partPromises.push(fetchPart("Build/" + file + ".part" + i));
+      }
+
+      const buffers = await Promise.all(partPromises);
+      const total = buffers.reduce((a, b) => a + b.length, 0);
+      const merged = new Uint8Array(total);
+      let offset = 0;
+      for (const b of buffers) {
+        merged.set(b, offset);
+        offset += b.length;
+      }
+
+      const mimeType = file.endsWith('.wasm') ? 'application/wasm' : 'application/octet-stream';
+      return URL.createObjectURL(new Blob([merged], { type: mimeType }));
+    }
+
+    async function preMergeAll() {
+      const map = {};
+      const files = Object.entries(SPLIT_MAP);
+      const total = files.length;
+      let done = 0;
+
+      const loadingText = document.getElementById("loading-text");
+
+      for (const [file, count] of files) {
+        const merged = await mergeParts(file, count);
+        map[file] = merged;
+        done++;
+        const percent = Math.floor((done / total) * 100);
+        loadingText.innerText = `LOADING... ${percent}%`;
+        console.log("Premerged:", file, "→", merged);
+      }
+
+      loadingText.style.display = "none";
+      return map;
+    }
+
+    (async () => {
+      const mergedMap = await preMergeAll();
+      window.SPLIT_MAP = mergedMap;
+      const origFetch = window.fetch;
+      window.fetch = async function(resource, options) {
+        if (typeof resource === "string") {
+          const key = resource.split("/").pop();
+          if (mergedMap[key]) {
+            return origFetch(mergedMap[key], options);
+          }
+          if (resource.includes("StreamingAssets")) {
+            return origFetch((document.querySelector('base').href !== null ? document.querySelector('base').href : "") + "StreamingAssets/"+resource.split("/StreamingAssets/")[1]);
+          }
+        }
+        return origFetch(resource, options);
+      };
+
+      const OrigXHR = window.XMLHttpRequest;
+      window.XMLHttpRequest = function() {
+        const xhr = new OrigXHR();
+        const origOpen = xhr.open;
+        xhr.open = function(method, url, ...rest) {
+          const key = url.split("/").pop();
+          if (mergedMap[key]) {
+            origOpen.call(xhr, method, mergedMap[key], ...rest);
+          } else {
+            origOpen.call(xhr, method, url, ...rest);
+          }
+        };
+        return xhr;
+      };
+
+      const canvas = document.querySelector("#unity-canvas");
+      const loaderUrl = "Build/BankRobbery.loader.js";
+      const config = {
+        dataUrl: "Build/BankRobbery.data",
+        frameworkUrl: "Build/BankRobbery.framework.js",
+        codeUrl: "Build/BankRobbery.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Bank Robbery",
+        productName: "Bank Robbery",
+        productVersion: "1.0.0"
+      };
+
+      const script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {}).then((unityInstance) => {
+          window.gameInstance = unityInstance;
+        }).catch((message) => console.error(message));
+      };
+      document.body.appendChild(script);
+    })();
+
+    function resizeCanvas() {
+      const canvas = document.getElementById("unity-canvas");
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
+      }
+    }
+    window.addEventListener("load", resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
+    </script>
+  </body>
+</html>
